@@ -1,0 +1,21 @@
+{
+  "name": "@nrd/nrd-ca",
+  "version": "1.0.0",
+  "description": "nicos Research & Development - Certificate Authority",
+  "main": "./src/app.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test for <fua.nrd-ids-tb> specified\" && exit 1",
+    "start": "node ./src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git02.int.nsc.ag:10022/Research/fua/app/nrd-ca.git"
+  },
+  "keywords": [
+    "ca",
+    "certs"
+  ],
+  "author": "spetrac@nicos-ag.com",
+  "license": ""
+}
