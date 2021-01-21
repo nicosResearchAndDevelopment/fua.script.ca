@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "nicos Research & Development - Certificate Authority",
   "main": "./src/app.js",
-  "dependencies": {},
+  "dependencies": {
+    "openssl-wrapper": "^0.3.4"
+  },
   "scripts": {
-    "test": "echo \"Error: no test for <fua.nrd-ids-tb> specified\" && exit 1",
-    "start": "node ./src/app.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js",
+    "generate-root-ca": "node ./src/scripts/generate-root-ca.js",
+    "generate-server-cert": "node ./src/scripts/generate-server-cert.js"
   },
   "repository": {
     "type": "git",
