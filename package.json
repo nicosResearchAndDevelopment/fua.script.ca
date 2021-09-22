@@ -2,15 +2,12 @@
   "name": "@nrd/nrd-ca",
   "version": "1.0.0",
   "description": "nicos Research & Development - Certificate Authority",
-  "main": "./src/app.js",
   "dependencies": {
-    "openssl-wrapper": "^0.3.4"
+    "@nrd/fua.core.util": "1.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/app.js",
-    "generate-root-ca": "node ./src/scripts/generate-root-ca.js",
-    "generate-server-cert": "node ./src/scripts/generate-server-cert.js"
+    "start": "node ./src/launch.ca.js"
   },
   "repository": {
     "type": "git",
