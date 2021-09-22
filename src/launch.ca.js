@@ -10,4 +10,6 @@ const
         {param} = proc.parseArgv(),
         caAgent = new CAAgent();
 
+    await caAgent.generateRootCA();
+
 })().catch(console.error);
