@@ -8,8 +8,10 @@ const
 
     const
         {param} = proc.parseArgv(),
-        caAgent = new CAAgent();
+        caAgent = new CAAgent(__resources);
 
-    await caAgent.generateRootCA();
+    // await caAgent.generateRootCert();
+    // await caAgent.generateClientCert();
+    console.log(await caAgent.parseCert());
 
 })().catch(console.error);

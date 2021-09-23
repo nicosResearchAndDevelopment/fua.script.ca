@@ -115,7 +115,6 @@ proc.nodeEnvArgs = function () {
  * @returns {Promise<string>}
  */
 proc.execProcess = async function (cwd, exe, ...args) {
-    debugger;
     const subprocess = child_process.spawn(exe, proc.flattenArgs(args), {cwd});
     verbose && process.stdout.write('$ ' + cwd + '> ' + subprocess.spawnargs.join(' ') + '\n');
     let stdout = '', stderr = '';
