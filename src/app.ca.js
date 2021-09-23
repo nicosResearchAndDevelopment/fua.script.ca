@@ -10,6 +10,8 @@ module.exports = async function ({agent, config}) {
     // TODO configurable
     // TODO re-runnable
     // TODO launch from same file
+    // TODO other arguments for agent constructor
+    // TODO runs preconfigured for the agent
 
     // await agent.generateRootCert();
     // await agent.generateClientCert();
