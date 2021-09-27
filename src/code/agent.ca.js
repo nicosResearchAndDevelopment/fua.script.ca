@@ -10,9 +10,9 @@ const
         publicKey:       '.pub',
         certificate:     '.crt',
         certificateText: '.txt',
-        signingRequest:  '.csr'
-    },
-    _resolvePath = (file, cwd) => path.isAbsolute(file) ? path.normalize(file) : path.join(cwd, file);
+        signingRequest:  '.csr',
+        config:          '.conf'
+    };
 
 module.exports = class CAAgent extends EventEmitter {
 
@@ -52,7 +52,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateSelfSignedCertificate
 
     async generateCertificateReadableText(file) {
-        const filePath = _resolvePath(file + _ext.certificateText, this.#cwd);
+        const filePath = util.resolvePath(file + _ext.certificateText, this.#cwd);
         await fs.writeFile(
             filePath,
             await this.#openssl('x509', {
@@ -80,21 +80,22 @@ module.exports = class CAAgent extends EventEmitter {
             CAkey:          root + _ext.privateKey,
             days:           398,
             in:             file + _ext.signingRequest,
-            out:            file + _ext.certificate
+            out:            file + _ext.certificate,
+            extfile:        root + _ext.config,
+            extensions:     'ski_aki'
         });
     } // CAAgent#generateSignedCertificate
 
     async generateRootCertificate(root) {
-        const dirPath = path.dirname(_resolvePath(root, this.#cwd));
-        await fs.mkdir(dirPath, {recursive: true});
+        await util.touchFolder(path.dirname(util.resolvePath(root, this.#cwd)));
+        await util.touchFile(util.resolvePath(root + _ext.config, this.#cwd));
         await this.generatePrivateKey(root);
         await this.generateSelfSignedCertificate(root);
         await this.generateCertificateReadableText(root);
     } // CAAgent#generateRootCertificate
 
     async generateClientCertificate(file, root) {
-        const dirPath = path.dirname(_resolvePath(file, this.#cwd));
-        await fs.mkdir(dirPath, {recursive: true});
+        await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
         await this.generatePrivateKey(file);
         await this.generatePublicKey(file);
         await this.generateCertificateSigningRequest(file);
@@ -103,22 +104,22 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateClientCertificate
 
     async readPrivateKey(file) {
-        const filePath = _resolvePath(file + _ext.privateKey, this.#cwd);
+        const filePath = util.resolvePath(file + _ext.privateKey, this.#cwd);
         return await fs.readFile(filePath, {encoding: 'utf-8'});
     } // CAAgent#readPrivateKey
 
     async readPublicKey(file) {
-        const filePath = _resolvePath(file + _ext.publicKey, this.#cwd);
+        const filePath = util.resolvePath(file + _ext.publicKey, this.#cwd);
         return await fs.readFile(filePath, {encoding: 'utf-8'});
     } // CAAgent#readPublicKey
 
     async readCertificate(file) {
-        const filePath = _resolvePath(file + _ext.certificate, this.#cwd);
+        const filePath = util.resolvePath(file + _ext.certificate, this.#cwd);
         return await fs.readFile(filePath, {encoding: 'utf-8'});
     } // CAAgent#readCertificate
 
     async readCertificateText(file) {
-        const filePath = _resolvePath(file + _ext.certificateText, this.#cwd);
+        const filePath = util.resolvePath(file + _ext.certificateText, this.#cwd);
         return await fs.readFile(filePath, {encoding: 'utf-8'});
     } // CAAgent#readCertificateText
 
