@@ -1,3 +1,6 @@
+const
+    path = require('path');
+
 /**
  * @param {import('./code/agent.ca.js').default} agent
  * @param {Object} config
@@ -13,8 +16,13 @@ module.exports = async function ({agent, config}) {
     // TODO other arguments for agent constructor
     // TODO runs preconfigured for the agent
 
-    // await agent.generateRootCert();
-    // await agent.generateClientCert();
-    console.log(await agent.parseCert());
+    // await agent.generateRootCertificate(
+    //     path.join(config.resources, 'root/ca')
+    // );
+
+    // await agent.generateClientCertificate(
+    //     path.join(config.resources, 'temp/client'),
+    //     path.join(config.resources, 'root/ca')
+    // );
 
 }; // module.exports

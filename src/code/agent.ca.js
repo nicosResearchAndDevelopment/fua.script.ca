@@ -1,102 +1,99 @@
 const
+    util         = require('@nrd/fua.core.util'),
+    assert       = util.Assert('agent.CA'),
     path         = require('path'),
+    crypto       = require('crypto'),
     fs           = require('fs/promises'),
     openssl      = require('./openssl.js'),
-    EventEmitter = require('events');
+    EventEmitter = require('events'),
+    extensions   = {
+        privateKey:      '.key',
+        publicKey:       '.pub',
+        certificate:     '.crt',
+        certificateText: '.txt',
+        signingRequest:  '.csr'
+    };
 
 module.exports = class CAAgent extends EventEmitter {
 
-    constructor(__resources = path.join(__dirname, '../../resources')) {
+    constructor(__resources = process.cwd()) {
+        // assert(util.isString());
         super();
         this.__resources = __resources;
     } // CAAgent#constructor
 
-    // TODO
-
-    async parseCert() {
-        const text = await openssl.x509({
-            in: path.join(this.__resources, 'root/ca.crt'),
-            // in:    path.join(this.__resources, 'temp/client.crt'),
-            noout: true,
-            text:  true
-            // C:  true
-        });
-
-        // const rows = text.split('\n').map((str) => {
-        //     const
-        //         row    = {depth: 0},
-        //         spacer = '    ';
-        //     while (str.startsWith(spacer)) {
-        //         row.depth++;
-        //         str = str.substr(spacer.length);
-        //     }
-        //     let ind = str.indexOf(': ');
-        //     if (ind < 0) {
-        //         row.value = str.trim();
-        //     } else {
-        //         row.key   = str.substring(0, ind).trim();
-        //         row.value = str.substring(ind + 1).trim();
-        //     }
-        //     return row;
-        // }).filter((row) => row.key || row.value);
-
-        // TODO
-        return text;
-        // return text.replace(/    /g, '|   ');
-        // return rows;
-    } // parseCert
-
-    async generateRootCert() {
-        // create root private key
+    async generatePrivateKey(filename) {
         await openssl.genrsa({
-            out: path.join(this.__resources, 'root/ca.key')
+            out: filename + '.key'
         }, 4096);
+    } // CAAgent#generatePrivateKey
 
-        // self-sign root cert with private key
+    async generatePublicKey(filename) {
+        await openssl.rsa({
+            pubout: true,
+            in:     filename + extensions.privateKey,
+            out:    filename + extensions.publicKey
+        });
+    } // CAAgent#generatePublicKey
+
+    async generateSelfSignedCertificate(filename) {
         await openssl.req({
             x509:  true,
             new:   true,
             nodes: true,
             batch: true,
-            key:   path.join(this.__resources, 'root/ca.key'),
+            key:   filename + extensions.privateKey,
             days:  825,
-            out:   path.join(this.__resources, 'root/ca.crt')
+            out:   filename + extensions.certificate
         });
-    } // CAAgent#generateRootCert
+    } // CAAgent#generateSelfSignedCertificate
 
-    async generateClientCert() {
-        // create client private key
-        await openssl.genrsa({
-            out: path.join(this.__resources, 'temp/client.key')
-        }, 4096);
+    async generateCertificateReadableText(filename) {
+        await fs.writeFile(
+            filename + extensions.certificateText,
+            await openssl.x509({
+                in:    filename + extensions.certificate,
+                noout: true,
+                text:  true
+            })
+        );
+    } // CAAgent#generateCertificateReadableText
 
-        // create signing request
+    async generateCertificateSigningRequest(filename) {
         await openssl.req({
             new:   true,
             batch: true,
-            key:   path.join(this.__resources, 'temp/client.key'),
-            out:   path.join(this.__resources, 'temp/client.csr')
+            key:   filename + extensions.privateKey,
+            out:   filename + extensions.signingRequest
         });
+    } // CAAgent#generateCertificateSigningRequest
 
-        // TODO SKI:AKI seem not to be avalable on the cert
-
-        // sign request with root ca
+    async generateSignedCertificate(filename, rootname) {
         await openssl.x509({
             req:            true,
             CAcreateserial: true,
-            CA:             path.join(this.__resources, 'root/ca.crt'),
-            CAkey:          path.join(this.__resources, 'root/ca.key'),
+            CA:             rootname + extensions.certificate,
+            CAkey:          rootname + extensions.privateKey,
             days:           398,
-            in:             path.join(this.__resources, 'temp/client.csr'),
-            out:            path.join(this.__resources, 'temp/client.crt')
+            in:             filename + extensions.signingRequest,
+            out:            filename + extensions.certificate
         });
+    } // CAAgent#generateSignedCertificate
 
-        // create client public key
-        await openssl.rsa({
-            pubout: true,
-            in:     path.join(this.__resources, 'temp/client.key'),
-            out:    path.join(this.__resources, 'temp/client.pub')
-        });
-    } // generateClientCert
+    async generateRootCertificate(filename) {
+        await this.generatePrivateKey(filename);
+        await this.generateSelfSignedCertificate(filename);
+        await this.generateCertificateReadableText(filename);
+    } // CAAgent#generateRootCertificate
+
+    async generateClientCertificate(filename, rootname) {
+        await this.generatePrivateKey(filename);
+        await this.generatePublicKey(filename);
+        await this.generateCertificateSigningRequest(filename);
+        await this.generateSignedCertificate(filename, rootname);
+        await this.generateCertificateReadableText(filename);
+    } // CAAgent#generateClientCertificate
+
+
 
 }; // CAAgent

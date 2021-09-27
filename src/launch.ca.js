@@ -13,7 +13,10 @@ const
 
     await ca_app({
         agent:  caAgent,
-        config: param
+        config: {
+            resources: __resources,
+            ...param
+        }
     });
 
 })().catch(console.error);
