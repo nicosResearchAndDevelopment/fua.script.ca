@@ -1,22 +1,21 @@
 const
-    path        = require('path'),
-    proc        = require('./code/proc.js'),
-    CAAgent     = require('./code/agent.ca.js'),
-    __resources = path.join(__dirname, '../resources'),
-    ca_app      = require('./app.ca.js');
+    path    = require('path'),
+    util    = require('./code/util.js'),
+    CAAgent = require('./code/agent.ca.js'),
+    ca_app  = require('./app.ca.js');
 
 (async function Main() {
 
     const
-        {param} = proc.parseArgv(),
-        caAgent = new CAAgent(__resources);
+        {param} = util.parseArgv(),
+        caAgent = new CAAgent({
+            cwd:     path.join(__dirname, '../resources'),
+            verbose: false
+        });
 
     await ca_app({
         agent:  caAgent,
-        config: {
-            resources: __resources,
-            ...param
-        }
+        config: param
     });
 
 })().catch(console.error);

@@ -20,9 +20,6 @@ module.exports = async function ({agent, config}) {
     //     path.join(config.resources, 'root/ca')
     // );
 
-    // await agent.generateClientCertificate(
-    //     path.join(config.resources, 'temp/client'),
-    //     path.join(config.resources, 'root/ca')
-    // );
+    await agent.generateClientCertificate('./temp/client', './root/ca');
 
 }; // module.exports

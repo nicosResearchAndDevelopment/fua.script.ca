@@ -1,10 +1,9 @@
 const
-    util         = require('@nrd/fua.core.util'),
-    assert       = util.Assert('agent.CA'),
+    util         = require('./util.js'),
+    subprocess   = require('@nrd/fua.module.subprocess'),
     path         = require('path'),
     crypto       = require('crypto'),
     fs           = require('fs/promises'),
-    openssl      = require('./openssl.js'),
     EventEmitter = require('events'),
     _ext         = {
         privateKey:      '.key',
@@ -16,20 +15,23 @@ const
 
 module.exports = class CAAgent extends EventEmitter {
 
-    constructor(__resources = process.cwd()) {
-        // assert(util.isString());
+    #cwd     = '';
+    #openssl = () => null;
+
+    constructor({cwd = process.cwd(), verbose = false} = {}) {
         super();
-        this.__resources = __resources;
+        this.#cwd     = cwd;
+        this.#openssl = subprocess.ExecutionProcess('openssl', cwd, verbose);
     } // CAAgent#constructor
 
     async generatePrivateKey(filename) {
-        await openssl.genrsa({
+        await this.#openssl('genrsa', {
             out: filename + _ext.privateKey
         }, 4096);
     } // CAAgent#generatePrivateKey
 
     async generatePublicKey(filename) {
-        await openssl.rsa({
+        await this.#openssl('rsa', {
             pubout: true,
             in:     filename + _ext.privateKey,
             out:    filename + _ext.publicKey
@@ -37,7 +39,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generatePublicKey
 
     async generateSelfSignedCertificate(filename) {
-        await openssl.req({
+        await this.#openssl('req', {
             x509:  true,
             new:   true,
             nodes: true,
@@ -50,8 +52,8 @@ module.exports = class CAAgent extends EventEmitter {
 
     async generateCertificateReadableText(filename) {
         await fs.writeFile(
-            filename + _ext.certificateText,
-            await openssl.x509({
+            path.isAbsolute(filename) ? filename : path.join(this.#cwd, filename + _ext.certificateText),
+            await this.#openssl('x509', {
                 in:    filename + _ext.certificate,
                 noout: true,
                 text:  true
@@ -60,7 +62,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateCertificateReadableText
 
     async generateCertificateSigningRequest(filename) {
-        await openssl.req({
+        await this.#openssl('req', {
             new:   true,
             batch: true,
             key:   filename + _ext.privateKey,
@@ -69,7 +71,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateCertificateSigningRequest
 
     async generateSignedCertificate(filename, rootname) {
-        await openssl.x509({
+        await this.#openssl('x509', {
             req:            true,
             CAcreateserial: true,
             CA:             rootname + _ext.certificate,
