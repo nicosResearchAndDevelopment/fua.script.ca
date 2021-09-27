@@ -11,12 +11,13 @@ const
         certificate:     '.crt',
         certificateText: '.txt',
         signingRequest:  '.csr'
-    };
+    },
+    _resolvePath = (file, cwd) => path.isAbsolute(file) ? path.normalize(file) : path.join(cwd, file);
 
 module.exports = class CAAgent extends EventEmitter {
 
     #cwd     = '';
-    #openssl = () => null;
+    #openssl = () => undefined;
 
     constructor({cwd = process.cwd(), verbose = false} = {}) {
         super();
@@ -24,9 +25,9 @@ module.exports = class CAAgent extends EventEmitter {
         this.#openssl = subprocess.ExecutionProcess('openssl', cwd, verbose);
     } // CAAgent#constructor
 
-    async generatePrivateKey(filename) {
+    async generatePrivateKey(file) {
         await this.#openssl('genrsa', {
-            out: filename + _ext.privateKey
+            out: file + _ext.privateKey
         }, 4096);
     } // CAAgent#generatePrivateKey
 
@@ -38,70 +39,97 @@ module.exports = class CAAgent extends EventEmitter {
         });
     } // CAAgent#generatePublicKey
 
-    async generateSelfSignedCertificate(filename) {
+    async generateSelfSignedCertificate(file) {
         await this.#openssl('req', {
             x509:  true,
             new:   true,
             nodes: true,
             batch: true,
-            key:   filename + _ext.privateKey,
+            key:   file + _ext.privateKey,
             days:  825,
-            out:   filename + _ext.certificate
+            out:   file + _ext.certificate
         });
     } // CAAgent#generateSelfSignedCertificate
 
-    async generateCertificateReadableText(filename) {
+    async generateCertificateReadableText(file) {
+        const filePath = _resolvePath(file + _ext.certificateText, this.#cwd);
         await fs.writeFile(
-            path.isAbsolute(filename) ? filename : path.join(this.#cwd, filename + _ext.certificateText),
+            filePath,
             await this.#openssl('x509', {
-                in:    filename + _ext.certificate,
+                in:    file + _ext.certificate,
                 noout: true,
                 text:  true
             })
         );
     } // CAAgent#generateCertificateReadableText
 
-    async generateCertificateSigningRequest(filename) {
+    async generateCertificateSigningRequest(file) {
         await this.#openssl('req', {
             new:   true,
             batch: true,
-            key:   filename + _ext.privateKey,
-            out:   filename + _ext.signingRequest
+            key:   file + _ext.privateKey,
+            out:   file + _ext.signingRequest
         });
     } // CAAgent#generateCertificateSigningRequest
 
-    async generateSignedCertificate(filename, rootname) {
+    async generateSignedCertificate(file, root) {
         await this.#openssl('x509', {
             req:            true,
             CAcreateserial: true,
-            CA:             rootname + _ext.certificate,
-            CAkey:          rootname + _ext.privateKey,
+            CA:             root + _ext.certificate,
+            CAkey:          root + _ext.privateKey,
             days:           398,
-            in:             filename + _ext.signingRequest,
-            out:            filename + _ext.certificate
+            in:             file + _ext.signingRequest,
+            out:            file + _ext.certificate
         });
     } // CAAgent#generateSignedCertificate
 
-    async generateRootCertificate(filename) {
-        await this.generatePrivateKey(filename);
-        await this.generateSelfSignedCertificate(filename);
-        await this.generateCertificateReadableText(filename);
+    async generateRootCertificate(root) {
+        const dirPath = path.dirname(_resolvePath(root, this.#cwd));
+        await fs.mkdir(dirPath, {recursive: true});
+        await this.generatePrivateKey(root);
+        await this.generateSelfSignedCertificate(root);
+        await this.generateCertificateReadableText(root);
     } // CAAgent#generateRootCertificate
 
-    async generateClientCertificate(filename, rootname) {
-        await this.generatePrivateKey(filename);
-        await this.generatePublicKey(filename);
-        await this.generateCertificateSigningRequest(filename);
-        await this.generateSignedCertificate(filename, rootname);
-        await this.generateCertificateReadableText(filename);
+    async generateClientCertificate(file, root) {
+        const dirPath = path.dirname(_resolvePath(file, this.#cwd));
+        await fs.mkdir(dirPath, {recursive: true});
+        await this.generatePrivateKey(file);
+        await this.generatePublicKey(file);
+        await this.generateCertificateSigningRequest(file);
+        await this.generateSignedCertificate(file, root);
+        await this.generateCertificateReadableText(file);
     } // CAAgent#generateClientCertificate
 
-    async loadPrivateKey(filename) {
-        return crypto.createPrivateKey(await fs.readFile(filename + _ext.privateKey));
+    async readPrivateKey(file) {
+        const filePath = _resolvePath(file + _ext.privateKey, this.#cwd);
+        return await fs.readFile(filePath, {encoding: 'utf-8'});
+    } // CAAgent#readPrivateKey
+
+    async readPublicKey(file) {
+        const filePath = _resolvePath(file + _ext.publicKey, this.#cwd);
+        return await fs.readFile(filePath, {encoding: 'utf-8'});
+    } // CAAgent#readPublicKey
+
+    async readCertificate(file) {
+        const filePath = _resolvePath(file + _ext.certificate, this.#cwd);
+        return await fs.readFile(filePath, {encoding: 'utf-8'});
+    } // CAAgent#readCertificate
+
+    async readCertificateText(file) {
+        const filePath = _resolvePath(file + _ext.certificateText, this.#cwd);
+        return await fs.readFile(filePath, {encoding: 'utf-8'});
+    } // CAAgent#readCertificateText
+
+    async loadPrivateKey(file) {
+        const fileContent = await this.readPrivateKey(file);
+        return crypto.createPrivateKey(fileContent);
     } // CAAgent#loadPrivateKey
 
-    async loadPublicKey(filename) {
-        return crypto.createPublicKey(await fs.readFile(filename + _ext.publicKey));
+    async loadPublicKey(file) {
+        const fileContent = await this.readPublicKey(file);
+        return crypto.createPublicKey(fileContent);
     } // CAAgent#loadPublicKey
 
 }; // CAAgent
