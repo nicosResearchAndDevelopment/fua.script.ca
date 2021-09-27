@@ -6,7 +6,7 @@ const
     fs           = require('fs/promises'),
     openssl      = require('./openssl.js'),
     EventEmitter = require('events'),
-    extensions   = {
+    _ext         = {
         privateKey:      '.key',
         publicKey:       '.pub',
         certificate:     '.crt',
@@ -24,15 +24,15 @@ module.exports = class CAAgent extends EventEmitter {
 
     async generatePrivateKey(filename) {
         await openssl.genrsa({
-            out: filename + '.key'
+            out: filename + _ext.privateKey
         }, 4096);
     } // CAAgent#generatePrivateKey
 
     async generatePublicKey(filename) {
         await openssl.rsa({
             pubout: true,
-            in:     filename + extensions.privateKey,
-            out:    filename + extensions.publicKey
+            in:     filename + _ext.privateKey,
+            out:    filename + _ext.publicKey
         });
     } // CAAgent#generatePublicKey
 
@@ -42,17 +42,17 @@ module.exports = class CAAgent extends EventEmitter {
             new:   true,
             nodes: true,
             batch: true,
-            key:   filename + extensions.privateKey,
+            key:   filename + _ext.privateKey,
             days:  825,
-            out:   filename + extensions.certificate
+            out:   filename + _ext.certificate
         });
     } // CAAgent#generateSelfSignedCertificate
 
     async generateCertificateReadableText(filename) {
         await fs.writeFile(
-            filename + extensions.certificateText,
+            filename + _ext.certificateText,
             await openssl.x509({
-                in:    filename + extensions.certificate,
+                in:    filename + _ext.certificate,
                 noout: true,
                 text:  true
             })
@@ -63,8 +63,8 @@ module.exports = class CAAgent extends EventEmitter {
         await openssl.req({
             new:   true,
             batch: true,
-            key:   filename + extensions.privateKey,
-            out:   filename + extensions.signingRequest
+            key:   filename + _ext.privateKey,
+            out:   filename + _ext.signingRequest
         });
     } // CAAgent#generateCertificateSigningRequest
 
@@ -72,11 +72,11 @@ module.exports = class CAAgent extends EventEmitter {
         await openssl.x509({
             req:            true,
             CAcreateserial: true,
-            CA:             rootname + extensions.certificate,
-            CAkey:          rootname + extensions.privateKey,
+            CA:             rootname + _ext.certificate,
+            CAkey:          rootname + _ext.privateKey,
             days:           398,
-            in:             filename + extensions.signingRequest,
-            out:            filename + extensions.certificate
+            in:             filename + _ext.signingRequest,
+            out:            filename + _ext.certificate
         });
     } // CAAgent#generateSignedCertificate
 
@@ -94,6 +94,12 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateCertificateReadableText(filename);
     } // CAAgent#generateClientCertificate
 
+    async loadPrivateKey(filename) {
+        return crypto.createPrivateKey(await fs.readFile(filename + _ext.privateKey));
+    } // CAAgent#loadPrivateKey
 
+    async loadPublicKey(filename) {
+        return crypto.createPublicKey(await fs.readFile(filename + _ext.publicKey));
+    } // CAAgent#loadPublicKey
 
 }; // CAAgent
