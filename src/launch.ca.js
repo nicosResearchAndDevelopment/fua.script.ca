@@ -10,7 +10,8 @@ const
         {param} = util.parseArgv(),
         caAgent = new CAAgent({
             cwd:     path.join(__dirname, '../resources'),
-            verbose: !!(param.verbose)
+            //verbose: !!(param.verbose)
+            verbose: true
         });
 
     await ca_app({
