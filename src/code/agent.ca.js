@@ -97,6 +97,8 @@ module.exports = class CAAgent extends EventEmitter {
             AKI_match       = /X509v3 Authority Key Identifier:\s*(\S+(?=\s))/.exec(certificateText);
         if (SKI_match) metadata.SKI = SKI_match[1];
         if (AKI_match) metadata.AKI = AKI_match[1];
+        metadata.SKIAKI          = metadata.SKI + ":" + metadata.AKI;
+        metadata.SKIAKI_id_leave = metadata.SKIAKI.replace(/:/g, "_");
         await fs.writeFile(filePath + _ext.jsonMetadata, JSON.stringify(metadata, null, 4));
     } // CAAgent#generateJsonMetadata
 
