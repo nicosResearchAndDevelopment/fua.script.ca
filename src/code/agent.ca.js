@@ -6,12 +6,14 @@ const
     fs           = require('fs/promises'),
     EventEmitter = require('events'),
     _ext         = {
-        privateKey:      '.key',
-        publicKey:       '.pub',
-        certificate:     '.crt',
-        certificateText: '.txt',
-        signingRequest:  '.csr',
-        config:          '.conf'
+        privateKey:        '.key',
+        publicKey:         '.pub',
+        certificate:       '.cert',
+        certificateText:   '.txt',
+        signingRequest:    '.csr',
+        certificateConfig: '.conf',
+        jsonMetadata:      '.json',
+        jsLoader:          '.js'
     };
 
 module.exports = class CAAgent extends EventEmitter {
@@ -81,14 +83,43 @@ module.exports = class CAAgent extends EventEmitter {
             days:           398,
             in:             file + _ext.signingRequest,
             out:            file + _ext.certificate,
-            extfile:        root + _ext.config,
+            extfile:        root + _ext.certificateConfig,
             extensions:     'ski_aki'
         });
     } // CAAgent#generateSignedCertificate
 
+    async generateJsonMetadata(file) {
+        const
+            filePath        = util.resolvePath(file, this.#cwd),
+            certificateText = await fs.readFile(filePath + _ext.certificateText, {encoding: 'utf-8'}),
+            metadata        = {},
+            SKI_match       = /X509v3 Subject Key Identifier:\s*(\S+(?=\s))/.exec(certificateText),
+            AKI_match       = /X509v3 Authority Key Identifier:\s*(\S+(?=\s))/.exec(certificateText);
+        if (SKI_match) metadata.SKI = SKI_match[1];
+        if (AKI_match) metadata.AKI = AKI_match[1];
+        await fs.writeFile(filePath + _ext.jsonMetadata, JSON.stringify(metadata, null, 4));
+    } // CAAgent#generateJsonMetadata
+
+    async generateJavaScriptLoader(file) {
+        const
+            filePath  = util.resolvePath(file, this.#cwd),
+            fileName  = path.basename(file),
+            codeLines = [
+                `const fs = require('fs'), path = require('path'), crypto = require('crypto');`,
+                `exports.meta = require('./${fileName}${_ext.jsonMetadata}');`,
+                `exports${_ext.privateKey} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.privateKey}'));`,
+                `exports.privateKey = crypto.createPrivateKey(exports${_ext.privateKey});`,
+                `exports${_ext.publicKey} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.publicKey}'));`,
+                `exports.publicKey = crypto.createPublicKey(exports${_ext.publicKey});`,
+                `exports${_ext.certificate} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.certificate}'));`,
+                `Object.freeze(exports);`
+            ];
+        await fs.writeFile(filePath + _ext.jsLoader, codeLines.join('\n'));
+    } // CAAgent#generateJavaScriptLoader
+
     async generateRootCertificate(root) {
         await util.touchFolder(path.dirname(util.resolvePath(root, this.#cwd)));
-        await util.touchFile(util.resolvePath(root + _ext.config, this.#cwd));
+        await util.touchFile(util.resolvePath(root + _ext.certificateConfig, this.#cwd));
         await this.generatePrivateKey(root);
         await this.generateSelfSignedCertificate(root);
         await this.generateCertificateReadableText(root);
@@ -101,6 +132,8 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateCertificateSigningRequest(file);
         await this.generateSignedCertificate(file, root);
         await this.generateCertificateReadableText(file);
+        await this.generateJsonMetadata(file);
+        await this.generateJavaScriptLoader(file);
     } // CAAgent#generateClientCertificate
 
     async readPrivateKey(file) {
