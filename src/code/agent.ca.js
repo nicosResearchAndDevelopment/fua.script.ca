@@ -22,7 +22,7 @@ module.exports = class CAAgent extends EventEmitter {
     constructor({cwd = process.cwd(), verbose = false} = {}) {
         super();
         this.#cwd     = cwd;
-        this.#openssl = subprocess.ExecutionProcess('openssl', cwd, verbose);
+        this.#openssl = subprocess.ExecutionProcess('openssl', {cwd, verbose, encoding: 'utf-8'});
     } // CAAgent#constructor
 
     async generatePrivateKey(file) {
