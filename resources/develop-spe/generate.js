@@ -6,4 +6,4 @@ const
         verbose: true
     });
 
-// caAgent.generateClientCertificate('develop-spe/test/client', 'root/ca').catch(console.error);
+// caAgent.generateClientCertificate('develop-spe/test/client', {ca: 'root/ca'}).catch(console.error);

@@ -15,7 +15,7 @@ describe('ca', function () {
     });
 
     test('create a temp/client cert', async function () {
-        await agent.generateClientCertificate('temp/client', 'root/ca');
+        await agent.generateClientCertificate('temp/client', {ca: 'root/ca'});
     });
 
 });

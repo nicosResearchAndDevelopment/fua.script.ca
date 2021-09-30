@@ -5,7 +5,7 @@ const
     crypto       = require('crypto'),
     fs           = require('fs/promises'),
     EventEmitter = require('events'),
-    _ext         = {
+    _ext         = Object.freeze({
         privateKey:        '.key',
         publicKey:         '.pub',
         certificate:       '.cert',
@@ -14,7 +14,7 @@ const
         certificateConfig: '.conf',
         jsonMetadata:      '.json',
         jsLoader:          '.js'
-    };
+    });
 
 module.exports = class CAAgent extends EventEmitter {
 
@@ -27,33 +27,59 @@ module.exports = class CAAgent extends EventEmitter {
         this.#openssl = subprocess.ExecutionProcess('openssl', {cwd, verbose, encoding: 'utf-8'});
     } // CAAgent#constructor
 
-    async generatePrivateKey(file) {
+    async generatePrivateKey(file, options) {
         await this.#openssl('genrsa', {
             out: file + _ext.privateKey
         }, 4096);
     } // CAAgent#generatePrivateKey
 
-    async generatePublicKey(filename) {
+    async generatePublicKey(file, options) {
         await this.#openssl('rsa', {
             pubout: true,
-            in:     filename + _ext.privateKey,
-            out:    filename + _ext.publicKey
+            in:     file + _ext.privateKey,
+            out:    file + _ext.publicKey
         });
     } // CAAgent#generatePublicKey
 
-    async generateSelfSignedCertificate(file) {
+    async generateSelfSignedCertificate(file, options) {
         await this.#openssl('req', {
             x509:  true,
             new:   true,
             nodes: true,
-            batch: true,
+            batch: !options?.subject,
+            subj:  options?.subject || false,
             key:   file + _ext.privateKey,
             days:  825,
             out:   file + _ext.certificate
         });
     } // CAAgent#generateSelfSignedCertificate
 
-    async generateCertificateReadableText(file) {
+    async generateCertificateSigningRequest(file, options) {
+        await this.#openssl('req', {
+            new:   true,
+            batch: !options?.subject,
+            subj:  options?.subject || false,
+            key:   file + _ext.privateKey,
+            out:   file + _ext.signingRequest
+        });
+    } // CAAgent#generateCertificateSigningRequest
+
+    async generateSignedCertificate(file, options) {
+        util.assert(options?.ca, 'expected ca');
+        await this.#openssl('x509', {
+            req:            true,
+            CAcreateserial: true,
+            CA:             options.ca + _ext.certificate,
+            CAkey:          options.ca + _ext.privateKey,
+            days:           398,
+            in:             file + _ext.signingRequest,
+            out:            file + _ext.certificate,
+            extfile:        options.ca + _ext.certificateConfig,
+            extensions:     'ski_aki'
+        });
+    } // CAAgent#generateSignedCertificate
+
+    async generateCertificateReadableText(file, options) {
         const filePath = util.resolvePath(file + _ext.certificateText, this.#cwd);
         await fs.writeFile(
             filePath,
@@ -65,30 +91,7 @@ module.exports = class CAAgent extends EventEmitter {
         );
     } // CAAgent#generateCertificateReadableText
 
-    async generateCertificateSigningRequest(file) {
-        await this.#openssl('req', {
-            new:   true,
-            batch: true,
-            key:   file + _ext.privateKey,
-            out:   file + _ext.signingRequest
-        });
-    } // CAAgent#generateCertificateSigningRequest
-
-    async generateSignedCertificate(file, root) {
-        await this.#openssl('x509', {
-            req:            true,
-            CAcreateserial: true,
-            CA:             root + _ext.certificate,
-            CAkey:          root + _ext.privateKey,
-            days:           398,
-            in:             file + _ext.signingRequest,
-            out:            file + _ext.certificate,
-            extfile:        root + _ext.certificateConfig,
-            extensions:     'ski_aki'
-        });
-    } // CAAgent#generateSignedCertificate
-
-    async generateJsonMetadata(file) {
+    async generateJsonMetadata(file, options) {
         const
             filePath        = util.resolvePath(file, this.#cwd),
             certificateText = await fs.readFile(filePath + _ext.certificateText, {encoding: 'utf-8'}),
@@ -102,7 +105,7 @@ module.exports = class CAAgent extends EventEmitter {
         await fs.writeFile(filePath + _ext.jsonMetadata, JSON.stringify(metadata, null, 4));
     } // CAAgent#generateJsonMetadata
 
-    async generateJavaScriptLoader(file) {
+    async generateJavaScriptLoader(file, options) {
         const
             filePath  = util.resolvePath(file, this.#cwd),
             fileName  = path.basename(file),
@@ -119,23 +122,23 @@ module.exports = class CAAgent extends EventEmitter {
         await fs.writeFile(filePath + _ext.jsLoader, codeLines.join('\n'));
     } // CAAgent#generateJavaScriptLoader
 
-    async generateRootCertificate(root) {
-        await util.touchFolder(path.dirname(util.resolvePath(root, this.#cwd)));
-        await util.touchFile(util.resolvePath(root + _ext.certificateConfig, this.#cwd));
-        await this.generatePrivateKey(root);
-        await this.generateSelfSignedCertificate(root);
-        await this.generateCertificateReadableText(root);
+    async generateRootCertificate(file, options) {
+        await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
+        await util.touchFile(util.resolvePath(file + _ext.certificateConfig, this.#cwd));
+        await this.generatePrivateKey(file, options);
+        await this.generateSelfSignedCertificate(file, options);
+        await this.generateCertificateReadableText(file, options);
     } // CAAgent#generateRootCertificate
 
-    async generateClientCertificate(file, root) {
+    async generateClientCertificate(file, options) {
         await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
-        await this.generatePrivateKey(file);
-        await this.generatePublicKey(file);
-        await this.generateCertificateSigningRequest(file);
-        await this.generateSignedCertificate(file, root);
-        await this.generateCertificateReadableText(file);
-        await this.generateJsonMetadata(file);
-        await this.generateJavaScriptLoader(file);
+        await this.generatePrivateKey(file, options);
+        await this.generatePublicKey(file, options);
+        await this.generateCertificateSigningRequest(file, options);
+        await this.generateSignedCertificate(file, options);
+        await this.generateCertificateReadableText(file, options);
+        await this.generateJsonMetadata(file, options);
+        await this.generateJavaScriptLoader(file, options);
     } // CAAgent#generateClientCertificate
 
     async readPrivateKey(file) {
