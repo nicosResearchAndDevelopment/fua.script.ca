@@ -14,7 +14,161 @@ const
         certificateConfig: '.conf',
         jsonMetadata:      '.json',
         jsLoader:          '.js'
+    }),
+    // SEE https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.4
+    // SEE https://docs.oracle.com/cd/E24191_01/common/tutorials/authz_cert_attributes.html
+    // SEE https://www.ibm.com/docs/en/ibm-mq/7.5?topic=certificates-distinguished-names
+    // SEE https://www.cryptosys.net/pki/manpki/pki_distnames.html
+    _dnMap       = Object.freeze({
+        // country
+        // C: CountryName
+        // C	Country
+        // C	countryName	2.5.4.6
+        c:           'C',
+        country:     'C',
+        countryname: 'C',
+
+        // organization
+        // O: Organization
+        // O	Organization name
+        // O	organizationName	2.5.4.10
+        o:                'O',
+        organization:     'O',
+        organizationname: 'O',
+
+        // organizational unit
+        // OU: OrganizationalUnit
+        // OU	Organizational Unit name
+        // OU	organizationalUnit	2.5.4.11
+        ou:                     'OU',
+        organizationalunit:     'OU',
+        organizationalunitname: 'OU',
+
+        // distinguished name qualifier
+        // DNQ	Distinguished name qualifier
+        dnq:                        'DNQ',
+        distinguishednamequalifier: 'DNQ',
+
+        // state or province name
+        // S: StateOrProvinceName
+        // ST (or SP or S)	State or Province name
+        // ST or S	stateOrProvinceName	2.5.4.8
+        s:                   'ST',
+        st:                  'ST',
+        state:               'ST',
+        statename:           'ST',
+        province:            'ST',
+        provincename:        'ST',
+        stateorprovince:     'ST',
+        stateorprovincename: 'ST',
+
+        // common name (e.g., "Susan Housley")
+        // CN: CommonName
+        // CN	Common Name
+        // CN	commonName	2.5.4.3
+        cn:         'CN',
+        commonname: 'CN',
+
+        // serial number
+        // SERIALNUMBER	Certificate serial number
+        // SERIALNUMBER	serialNumber	2.5.4.5
+        serialnumber: 'SERIALNUMBER',
+
+        // locality
+        // L: Locality
+        // L	Locality name
+        // L	localityName	2.5.4.7
+        l:            'L',
+        locality:     'L',
+        localityname: 'L',
+
+        // title
+        // T	Title
+        // T or TITLE	title	2.5.4.12
+        t:     'T',
+        title: 'T',
+
+        // surname
+        // SN	surname	2.5.4.4
+        sn:      'SN',
+        surname: 'SN',
+
+        // given name
+        // G or GN	givenName	2.5.4.42
+        gn:        'GN',
+        givenname: 'GN',
+
+        // initials
+
+        // pseudonym
+
+        // generation qualifier (e.g., "Jr.", "3rd", or "IV")
+
+        // MAIL	Email address
+        // E	Email address (Deprecated in preference to MAIL)
+        // E	emailAddress (deprecated)	1.2.840.113549.1.9.1
+        e:     'MAIL',
+        mail:  'MAIL',
+        email: 'MAIL',
+
+        // UID or USERID	User identifier
+        // UID	userID	0.9.2342.19200300.100.1.1
+        uid:    'UID',
+        userid: 'UID',
+
+        // DC	Domain component
+        // DC	domainComponent	0.9.2342.19200300.100.1.25
+        dc:              'DC',
+        domaincomponent: 'DC',
+
+        // STREET	Street / First line of address
+        // STREET	streetAddress	2.5.4.9
+        street: 'STREET',
+
+        // PC	Postal code / zip code
+        pc:         'PC',
+        postalcode: 'PC',
+
+        // UNSTRUCTUREDNAME	Host name
+        unstructuredname: 'UNSTRUCTUREDNAME',
+        hostname:         'UNSTRUCTUREDNAME',
+
+        // UNSTRUCTUREDADDRESS	IP address
+        unstructuredaddress: 'UNSTRUCTUREDADDRESS',
+        ipaddress:           'UNSTRUCTUREDADDRESS'
     });
+
+/**
+ * @param {string | {[key: string]: string | Array<string>} | Array<string, {[key: string]: string | Array<string>}>} dn
+ * @returns {string | null}
+ * @private
+ */
+function _serializeDistinguishedName(dn) {
+    if (!dn) return null;
+    if (util.isString(dn)) {
+        if (dn.startsWith('/')) return dn;
+        else return '/' + dn;
+    }
+    if (util.isArray(dn)) {
+        if (dn.length === 0) return null;
+        return dn.map(_serializeDistinguishedName).join('');
+    }
+    if (util.isObject(dn)) {
+        const resultArr = [];
+        for (let [key, value] of Object.entries(dn)) {
+            const attr = _dnMap[key.toLowerCase().replace(/[\-_]/g, '')];
+            if (!attr) continue;
+            if (util.isArray(value)) {
+                for (let entry of value) {
+                    resultArr.push(attr + '=' + entry);
+                }
+            } else {
+                resultArr.push(attr + '=' + value);
+            }
+        }
+        return _serializeDistinguishedName(resultArr);
+    }
+} // _serializeDistinguishedName
 
 module.exports = class CAAgent extends EventEmitter {
 
@@ -47,7 +201,7 @@ module.exports = class CAAgent extends EventEmitter {
             new:   true,
             nodes: true,
             batch: !options?.subject,
-            subj:  options?.subject || false,
+            subj:  _serializeDistinguishedName(options?.subject) || false,
             key:   file + _ext.privateKey,
             days:  825,
             out:   file + _ext.certificate
@@ -58,7 +212,7 @@ module.exports = class CAAgent extends EventEmitter {
         await this.#openssl('req', {
             new:   true,
             batch: !options?.subject,
-            subj:  options?.subject || false,
+            subj:  _serializeDistinguishedName(options?.subject) || false,
             key:   file + _ext.privateKey,
             out:   file + _ext.signingRequest
         });
@@ -129,6 +283,18 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateSelfSignedCertificate(file, options);
         await this.generateCertificateReadableText(file, options);
     } // CAAgent#generateRootCertificate
+
+    async generateSubCertificate(file, options) {
+        await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
+        await fs.copyFile(
+            util.resolvePath(options.ca + _ext.certificateConfig, this.#cwd),
+            util.resolvePath(file + _ext.certificateConfig, this.#cwd)
+        );
+        await this.generatePrivateKey(file, options);
+        await this.generateCertificateSigningRequest(file, options);
+        await this.generateSignedCertificate(file, options);
+        await this.generateCertificateReadableText(file, options);
+    } // CAAgent#generateSubCertificate
 
     async generateClientCertificate(file, options) {
         await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
