@@ -6,15 +6,15 @@
 module.exports = async function ({agent, config}) {
 
     // REM : generally do not re-generate the root_ca
-    await agent.generateRootCertificate('root/ca', {
-        subject: {
-            country:      'DE',
-            state:        'NRW',
-            locality:     'Muenster',
-            organization: 'nicos Research & Development GmbH',
-            commonName:   'root_ca'
-        }
-    });
+    // await agent.generateRootCertificate('root/ca', {
+    //     subject: {
+    //         country:      'DE',
+    //         state:        'NRW',
+    //         locality:     'Muenster',
+    //         organization: 'nicos Research & Development GmbH',
+    //         commonName:   'root_ca'
+    //     }
+    // });
 
     //region TEST
     let root;
@@ -151,11 +151,11 @@ module.exports = async function ({agent, config}) {
         //region TEST tb.ec.ids : applicant
         // REM : GAIAboX
         await agent.generateClientCertificate('nrd-testbed/ec/ids/applicant/gbx/connector/client', {
-            ca:      'nrd-testbed/ec/ids/participant/ca',
+            ca:      'nrd-testbed/ec/ids/participants/ca',
             subject: {C, ST, O, CN: ['tb', 'ec_ids_gbx-03_connector']}
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/applicant/gbx/tls-server/server', {
-            ca:      'nrd-testbed/ec/ids/participant/ca',
+            ca:      'nrd-testbed/ec/ids/participants/ca',
             subject: {C, ST, O, CN: ['tb', 'ec_ids_gbx-03_tls-server']}
         });
         //endregion TEST tb.ec.ids : applicant
