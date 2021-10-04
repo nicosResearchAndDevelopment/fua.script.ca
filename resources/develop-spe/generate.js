@@ -6,5 +6,6 @@ const
         verbose: true
     });
 
-// caAgent.generateClientCertificate('develop-spe/test/client', {ca: 'root/ca'}).catch(console.error);
-// caAgent.generateClientCertificate('develop-spe/test/server', {ca: 'root/ca'}).catch(console.error);
+// caAgent.generateSubCertificate('develop-spe/test/ca', {ca: 'root/ca'}).catch(console.error);
+// caAgent.generateClientCertificate('develop-spe/test/client', {ca: 'develop-spe/test/ca'}).catch(console.error);
+// caAgent.generateClientCertificate('develop-spe/test/server', {ca: 'develop-spe/test/ca'}).catch(console.error);
