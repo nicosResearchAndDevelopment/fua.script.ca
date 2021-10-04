@@ -7,3 +7,4 @@ const
     });
 
 // caAgent.generateClientCertificate('develop-spe/test/client', {ca: 'root/ca'}).catch(console.error);
+// caAgent.generateClientCertificate('develop-spe/test/server', {ca: 'root/ca'}).catch(console.error);
