@@ -5,8 +5,7 @@
  */
 module.exports = async function ({agent, config}) {
 
-    //
-    // REM : do not use: await agent.generateRootCertificate('root/ca');
+    // REM : generally do not re-generate the root_ca
     await agent.generateRootCertificate('root/ca', {
         subject: {
             country:      'DE',
@@ -16,7 +15,6 @@ module.exports = async function ({agent, config}) {
             commonName:   'root_ca'
         }
     });
-    //
 
     //region TEST
     let root;
