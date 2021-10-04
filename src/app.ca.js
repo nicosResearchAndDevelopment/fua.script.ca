@@ -26,7 +26,7 @@ module.exports = async function ({agent, config}) {
         // REM : testbed-ca
         await agent.generateSubCertificate('nrd-testbed/ca', {
             ca:      'root/ca',
-            subject: {C, ST, L, O, CN: 'tb'}
+            subject: {C, ST, L, O, CN: ['tb_ca']}
         });
 
         // REM : testbed 'tb'

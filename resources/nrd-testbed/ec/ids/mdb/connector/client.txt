@@ -1,0 +1,87 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            58:01:16:fc:da:ea:9a:84:78:d1:e2:dc:80:67:f6:ea:4f:2e:bc:90
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec_ids_components_ca
+        Validity
+            Not Before: Oct  4 14:48:24 2021 GMT
+            Not After : Nov  6 14:48:24 2022 GMT
+        Subject: C = DE, ST = NRW, O = International Data Spaces e. V., CN = tb, CN = ec_ids_mdb_connector
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (4096 bit)
+                Modulus:
+                    00:c9:ad:36:59:63:08:1e:a9:dd:ca:b1:0c:b2:87:
+                    6e:d5:bf:22:ac:b2:ba:56:b9:2f:a5:ee:20:8e:57:
+                    b3:84:15:f2:47:e6:94:88:c3:72:81:75:fb:3b:72:
+                    ad:b7:06:5f:cf:ac:b7:76:88:bb:8d:99:72:23:3b:
+                    de:07:69:e1:b5:0a:91:44:ab:01:0a:d7:54:d2:85:
+                    79:2c:ca:30:9d:dd:2f:62:93:b4:92:a9:be:ef:8f:
+                    9a:0d:f0:7d:19:a7:53:17:f5:b7:fe:a9:7e:03:9b:
+                    55:f7:78:e0:c2:a2:e3:8f:a3:21:ed:1d:d5:37:1d:
+                    af:5e:35:c3:e7:d6:67:5b:bf:99:f2:69:ee:8d:77:
+                    be:e4:27:52:22:3b:71:b1:12:10:11:15:f9:78:66:
+                    3a:b9:df:4b:5d:4e:eb:c1:97:57:b5:80:e3:38:ea:
+                    60:68:6c:ee:54:bd:fd:1b:16:e8:9a:ef:33:a6:9d:
+                    ff:ab:d2:20:24:1f:75:be:0e:1d:6b:ab:bb:46:02:
+                    57:70:d8:57:ab:25:2f:46:f7:66:7c:0a:e1:99:2f:
+                    f5:ff:44:c7:6d:3c:21:a2:cf:a3:4c:ac:61:bb:5e:
+                    b0:94:a3:f5:a4:86:99:75:7e:c4:8b:a9:2c:fc:3d:
+                    27:86:c9:a5:1e:97:8f:61:ba:9f:d2:90:c2:c3:2a:
+                    50:ec:59:9b:91:9e:01:e1:34:18:1d:d7:ab:f1:d2:
+                    78:6a:b9:1c:46:b9:53:ae:d7:e7:ee:a1:ae:e3:24:
+                    b1:88:39:30:42:3f:eb:2a:30:f9:3b:25:38:f8:05:
+                    1b:c8:6d:5d:5b:6a:ab:ed:e6:bc:a8:01:11:1d:0c:
+                    e3:3d:b5:d1:4a:43:df:79:e2:96:25:91:ea:6a:33:
+                    83:05:38:80:fd:02:13:d2:1e:8c:b2:25:aa:e7:a2:
+                    96:32:6b:24:3f:4d:a3:0c:6b:02:39:82:fc:7f:41:
+                    c0:34:08:e3:a2:04:2f:d3:6b:09:d2:b6:7f:4b:ee:
+                    72:cc:fe:21:66:d0:e2:5f:3b:b0:80:eb:d5:ea:1f:
+                    1c:22:83:43:18:a1:0c:b0:16:60:aa:40:e2:21:a2:
+                    fa:c1:f8:82:1d:aa:01:07:48:38:a9:ee:b0:6c:f2:
+                    60:af:74:f3:db:1e:87:93:f0:56:7a:50:e8:5f:fd:
+                    26:f1:41:3a:84:6b:56:1d:28:d7:78:5f:07:c6:3c:
+                    16:38:64:58:f6:0c:ff:38:5d:ca:85:80:b4:0b:13:
+                    75:e7:71:c5:20:8a:2e:25:1a:a3:21:23:11:94:f1:
+                    85:74:1f:2f:a9:1b:45:d0:30:71:cc:cf:fd:9a:45:
+                    5e:5e:37:a0:48:69:7b:b1:7a:6c:21:f8:cb:e7:c4:
+                    a1:d7:99
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                78:07:D8:4E:E6:6F:CB:4D:AF:67:39:20:8E:EB:C7:D1:C7:90:73:A1
+            X509v3 Authority Key Identifier: 
+                keyid:95:9C:02:66:A4:F6:09:28:09:FC:F8:FC:A2:41:3C:A1:22:F1:3B:EB
+
+    Signature Algorithm: sha256WithRSAEncryption
+         42:67:bc:a8:18:c0:73:f0:72:fb:d7:3c:d0:b7:85:89:9f:99:
+         4e:30:a9:f2:bf:16:39:e9:59:dc:40:91:d1:c4:72:7b:25:d9:
+         b5:d2:6c:c4:37:b8:ab:f3:76:a8:c8:1b:4f:9e:6d:df:8c:7d:
+         b1:95:50:2e:64:b6:74:1d:a7:ba:1a:fd:6c:fb:c4:8f:dc:ff:
+         46:64:4c:85:76:52:e5:99:e4:37:74:83:b7:bd:58:80:35:50:
+         d2:19:0e:61:ab:ac:17:b1:87:6a:63:0b:ee:b0:4c:0e:a3:58:
+         20:a4:f5:a8:db:aa:a9:93:9a:31:b7:b6:ee:94:73:97:bb:14:
+         ed:43:d9:42:fc:6e:02:84:0c:c9:41:57:ae:68:21:a4:88:05:
+         c8:53:77:82:01:c5:4e:3d:23:dc:08:ac:38:7f:3e:5e:30:25:
+         d6:03:96:17:4c:f9:7a:01:55:e9:0f:f5:26:5d:c5:5b:c5:cc:
+         cf:c2:cd:75:38:ae:9b:50:28:a6:69:80:07:77:f3:cb:bf:28:
+         20:70:84:2a:b0:2f:26:86:df:a1:34:b8:9a:f5:cd:db:f2:53:
+         75:b4:9e:84:0e:e6:13:85:fe:f7:12:7d:ee:18:7a:0f:08:a5:
+         4a:c8:f0:95:6d:14:a1:32:eb:3b:66:cb:e1:6a:b5:b5:e4:7b:
+         91:f2:6e:6e:4e:e2:f4:12:67:d4:e8:91:91:bd:a5:86:e6:26:
+         a7:08:7c:58:15:be:a3:43:2d:21:29:ec:cb:04:63:7e:3b:0d:
+         80:cd:2b:05:46:f9:59:cb:41:f6:d5:bd:cf:0c:bd:60:14:fe:
+         ee:f6:1d:ce:d4:58:fc:47:b2:50:92:6b:fd:9f:09:c7:9b:bd:
+         7d:09:2d:25:ee:0a:9e:e9:c7:ed:fa:2a:16:62:6f:56:85:43:
+         6b:af:3b:e7:a7:4a:5f:03:d2:bd:51:90:d9:f3:fc:53:66:4e:
+         79:7d:bf:63:40:aa:9d:ac:63:07:7c:52:8e:56:f6:85:a3:77:
+         fa:66:c8:05:27:77:1a:4d:6e:5f:01:92:44:8b:d1:f0:20:89:
+         da:52:64:7c:c9:79:13:52:1d:02:e1:30:7d:fb:fa:4f:89:a6:
+         54:fd:a9:4d:3d:67:15:48:90:08:7f:53:89:0a:80:ee:d9:56:
+         26:1a:63:c2:23:c2:25:24:cf:c2:51:2a:44:8d:3c:a3:2d:e0:
+         10:3b:1c:60:a1:9a:4a:c4:9d:c8:60:76:34:95:99:0f:7a:a6:
+         ef:4a:54:f5:3d:58:d2:72:dd:12:b7:e6:9f:96:f9:d7:e0:e3:
+         c0:c8:75:cb:85:f5:9c:95:26:e5:99:4c:52:8e:37:82:e7:c8:
+         6a:3d:da:50:bd:62:ad:07
