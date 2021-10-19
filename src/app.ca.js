@@ -147,7 +147,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/alice/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_connector_alice_tls-server']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'https://alice.nicos-rd.com/']}
         });
 
         // REM : BOB
@@ -157,7 +157,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/bob/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_connector_bob_tls-server']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'https://bob.nicos-rd.com/']}
         });
 
         // REM : Data Space Connector
@@ -167,7 +167,7 @@ module.exports = async function ({agent, config}) {
          });
          await agent.generateClientCertificate('nrd-testbed/ec/ids/dsc/tls-server/server', {
              ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'ec_ids_dsc_tls-server']}
+             subject: {C, ST, O, CN: ['tb', 'https://ids-dsc.nicos-rd.com/']}
          });
 
         //region TEST tb.ec.ids : cut (applicant)
@@ -182,15 +182,15 @@ module.exports = async function ({agent, config}) {
             subject: {C, ST, O, CN: ['tb', 'ec_ids_connector_nrd_gbx-03_tls-server']}
         });
 
-        // REM : Data Space Connector (dsc)
-        await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/connector/client', {
-            ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'cut', 'ec_ids_connector_fh_dsc']}
-        });
-        await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/tls-server/server', {
-            ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, O, CN: ['tb', 'ec_ids_fh_connector_dsc_tls-server']}
-        });
+        //// REM : Data Space Connector (dsc)
+        //await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/connector/client', {
+        //    ca:      'nrd-testbed/ec/ids/component/ca',
+        //    subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'cut', 'ec_ids_connector_fh_dsc']}
+        //});
+        //await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/tls-server/server', {
+        //    ca:      'nrd-testbed/ec/ids/component/ca',
+        //    subject: {C, ST, O, CN: ['tb', 'ec_ids_fh_connector_dsc_tls-server']}
+        //});
 
         //endregion TEST tb.ec.ids : cut (applicant)
 
