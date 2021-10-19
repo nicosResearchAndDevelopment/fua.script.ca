@@ -7,7 +7,7 @@ const
         fs.readFileSync('../root/ca.cert')
     ],
     https       = require('https'),
-    test_port   = 8080;
+    test_port   = 8091;
 
 https.createServer({
     key:  server_conf.key,

@@ -25,7 +25,8 @@ caAgent.generateClientCertificate('develop-spe/test/client', {
     ca:      'develop-spe/test/ca',
     subject: {
         ...defaultSubj,
-        CN: ['develop-spe-test-client', 'localhost']
+        //CN: ['develop-spe-test-client', 'localhost']
+        CN: ['develop-spe-test-client']
     }
 }).catch(console.error);
 
@@ -33,6 +34,7 @@ caAgent.generateClientCertificate('develop-spe/test/server', {
     ca:      'develop-spe/test/ca',
     subject: {
         ...defaultSubj,
-        CN: ['develop-spe-test-server', 'localhost']
+        //CN: ['develop-spe-test-server', 'localhost']
+        CN: ['develop-spe-test-server']
     }
 }).catch(console.error);
