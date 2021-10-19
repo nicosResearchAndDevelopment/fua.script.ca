@@ -229,7 +229,7 @@ module.exports = class CAAgent extends EventEmitter {
             in:             file + _ext.signingRequest,
             out:            file + _ext.certificate,
             extfile:        options.ca + _ext.certificateConfig,
-            extensions:     options.ext || 'default'
+            extensions:     options.extensions || 'default'
         });
     } // CAAgent#generateSignedCertificate
 
