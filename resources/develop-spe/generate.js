@@ -3,7 +3,7 @@ const
     CAAgent = require('../../src/code/agent.ca.js'),
     caAgent = new CAAgent({
         cwd:     path.join(__dirname, '..'),
-        verbose: true
+        verbose: false
     });
 
 // caAgent.generateSubCertificate('develop-spe/test/ca', {ca: 'root/ca'}).catch(console.error);
