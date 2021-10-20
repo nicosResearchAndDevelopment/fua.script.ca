@@ -12,6 +12,7 @@ const
         certificateText:   '.txt',
         signingRequest:    '.csr',
         certificateConfig: '.conf',
+        caBundle:          '.ca',
         jsonMetadata:      '.json',
         jsLoader:          '.js'
     }),
@@ -245,6 +246,26 @@ module.exports = class CAAgent extends EventEmitter {
         );
     } // CAAgent#generateCertificateReadableText
 
+    async generateCertificateAuthorityBundle(file, options) {
+        let
+            caCertPath   = util.resolvePath(options.ca + _ext.certificate, this.#cwd),
+            caCert       = await fs.readFile(caCertPath, 'utf-8'),
+            caBundlePath = util.resolvePath(options.ca + _ext.caBundle, this.#cwd),
+            caBundle     = null,
+            bundlePath   = util.resolvePath(file + _ext.caBundle, this.#cwd),
+            bundle       = caCert.trim();
+
+        try {
+            caBundle = await fs.readFile(caBundlePath, 'utf-8');
+            bundle += '\n';
+            bundle += caBundle.trim();
+        } catch (err) {
+            if (err.code !== 'ENOENT') throw err;
+        }
+
+        await fs.writeFile(bundlePath, bundle);
+    } // CAAgent#generateCertificateAuthorityBundle
+
     async generateJsonMetadata(file, options) {
         const
             filePath        = util.resolvePath(file, this.#cwd),
@@ -265,12 +286,14 @@ module.exports = class CAAgent extends EventEmitter {
             fileName  = path.basename(file),
             codeLines = [
                 `const fs = require('fs'), path = require('path'), crypto = require('crypto');`,
+                `const load = (filename) => fs.readFileSync(path.join(__dirname, filename));`,
                 `exports.meta = require('./${fileName}${_ext.jsonMetadata}');`,
-                `exports${_ext.privateKey} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.privateKey}'));`,
+                `exports${_ext.privateKey} = load('./${fileName}${_ext.privateKey}');`,
                 `exports.privateKey = crypto.createPrivateKey(exports${_ext.privateKey});`,
-                `exports${_ext.publicKey} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.publicKey}'));`,
+                `exports${_ext.publicKey} = load('./${fileName}${_ext.publicKey}');`,
                 `exports.publicKey = crypto.createPublicKey(exports${_ext.publicKey});`,
-                `exports${_ext.certificate} = fs.readFileSync(path.join(__dirname, './${fileName}${_ext.certificate}'));`,
+                `exports${_ext.certificate} = load('./${fileName}${_ext.certificate}');`,
+                `exports${_ext.caBundle} = load('./${fileName}${_ext.caBundle}');`,
                 `Object.freeze(exports);`
             ];
         await fs.writeFile(filePath + _ext.jsLoader, codeLines.join('\n'));
@@ -295,6 +318,7 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generatePrivateKey(file, options);
         await this.generateCertificateSigningRequest(file, options);
         await this.generateSignedCertificate(file, options);
+        await this.generateCertificateAuthorityBundle(file, options);
         await this.generateCertificateReadableText(file, options);
     } // CAAgent#generateSubCertificate
 
@@ -305,6 +329,7 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generatePublicKey(file, options);
         await this.generateCertificateSigningRequest(file, options);
         await this.generateSignedCertificate(file, options);
+        await this.generateCertificateAuthorityBundle(file, options);
         await this.generateCertificateReadableText(file, options);
         await this.generateJsonMetadata(file, options);
         await this.generateJavaScriptLoader(file, options);

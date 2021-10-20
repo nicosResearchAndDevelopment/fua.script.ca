@@ -1,19 +1,13 @@
 const
-    fs          = require('fs'),
     server_conf = require('./test/server.js'),
     client_conf = require('./test/client.js'),
-    ca_certs    = [
-        // fs.readFileSync('./test/ca.cert'),
-        // fs.readFileSync('../root/ca.cert'),
-        fs.readFileSync('./test/ca.ca-bundle')
-    ],
     https       = require('https'),
-    test_port   = 8091;
+    PORT        = 8091;
 
 https.createServer({
     key:                server_conf.key,
     cert:               server_conf.cert,
-    ca:                 ca_certs,
+    ca:                 server_conf.ca,
     requestCert:        true,
     rejectUnauthorized: true
 }, (server_request, server_response) => {
@@ -21,11 +15,11 @@ https.createServer({
     console.log(server_request.headers);
     server_response.end();
     console.log('response send');
-}).listen(test_port, () => {
-    const client_request = https.request('https://localhost:' + test_port, {
+}).listen(PORT, () => {
+    const client_request = https.request('https://localhost:' + PORT, {
         key:                client_conf.key,
         cert:               client_conf.cert,
-        ca:                 ca_certs,
+        ca:                 client_conf.ca,
         rejectUnauthorized: true
     }, (client_response) => {
         console.log('response received');

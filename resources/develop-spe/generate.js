@@ -12,27 +12,31 @@ const
         O:  'nicos Research & Development GmbH'
     };
 
-// caAgent.generateSubCertificate('develop-spe/test/ca', {
-//     ca:      'root/ca',
-//     subject: {
-//         ...defaultSubj,
-//         CN: 'develop-spe-test-ca'
-//     },
-//     ext: 'root_extension'
-// }).catch(console.error);
+(async function Main() {
 
-caAgent.generateClientCertificate('develop-spe/test/client', {
-    ca:      'develop-spe/test/ca',
-    subject: {
-        ...defaultSubj,
-        CN: ['develop-spe-test-client', 'localhost']
-    }
-}).catch(console.error);
+    await caAgent.generateSubCertificate('develop-spe/test/ca', {
+        ca:         'root/ca',
+        subject:    {
+            ...defaultSubj,
+            CN: 'develop-spe-test-ca'
+        },
+        extensions: 'root_extension'
+    });
 
-caAgent.generateClientCertificate('develop-spe/test/server', {
-    ca:      'develop-spe/test/ca',
-    subject: {
-        ...defaultSubj,
-        CN: ['develop-spe-test-server', 'localhost']
-    }
-}).catch(console.error);
+    await caAgent.generateClientCertificate('develop-spe/test/client', {
+        ca:      'develop-spe/test/ca',
+        subject: {
+            ...defaultSubj,
+            CN: ['develop-spe-test-client', 'localhost']
+        }
+    });
+
+    await caAgent.generateClientCertificate('develop-spe/test/server', {
+        ca:      'develop-spe/test/ca',
+        subject: {
+            ...defaultSubj,
+            CN: ['develop-spe-test-server', 'localhost']
+        }
+    });
+
+})().catch(err => console.error(err?.stack ?? err));
