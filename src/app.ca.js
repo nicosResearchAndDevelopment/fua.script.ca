@@ -28,19 +28,20 @@ module.exports = async function ({agent, config}) {
             O  = 'nicos Research & Development GmbH'
         ; // const
 
-        if (false) {
+        if (true) {
             debugger;
             //throw (new Error(``));
             // REM : testbed-ca
             await agent.generateSubCertificate('nrd-testbed/ca', {
                 ca:      'root/ca',
-                subject: {C, ST, L, O, CN: ['tb', 'tb_ca']}
+                subject: {C, ST, L, O, CN: ['tb', 'tb_ca']},
+                extensions: "root_extension"
             });
         } // if (shield)
 
-        if (false) {
+        if (true) {
             debugger;
-            throw (new Error(``));
+            //throw (new Error(``));
             // REM : testbed 'tb'
             await agent.generateClientCertificate('nrd-testbed/tb/tls-server/server', {
                 ca:      'nrd-testbed/ca',
@@ -59,18 +60,20 @@ module.exports = async function ({agent, config}) {
 
         let cert_config = {};
 
-        if (false) {
+        if (true) {
             debugger;
-            throw (new Error(``));
+            //throw (new Error(``));
             // REM: participant ca
             await agent.generateSubCertificate('nrd-testbed/ec/ids/participant/ca', {
                 ca:      'nrd-testbed/ca',
-                subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_participant_ca']}
+                subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_participant_ca']},
+                extensions: "root_extension"
             });
             // REM : component ca
             await agent.generateSubCertificate('nrd-testbed/ec/ids/component/ca', {
                 ca:      'nrd-testbed/ca',
-                subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_component_ca']}
+                subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_component_ca']},
+                extensions: "root_extension"
             });
         } // if (shield)
 

@@ -21,8 +21,8 @@ https.createServer({
 }).listen(test_port, () => {
     const client_request = https.request('https://localhost:' + test_port, {
         key:  client_conf.key,
-        cert: client_conf.cert,
-        ca:   ca_certs
+        cert: client_conf.cert
+        //,ca:   ca_certs
     }, (client_response) => {
         console.log('response received');
         console.log(client_response.headers);
