@@ -28,9 +28,9 @@ module.exports = async function ({agent, config}) {
             O  = 'nicos Research & Development GmbH'
         ; // const
 
-        if (true) {
+        if (false) {
             debugger;
-            throw (new Error(``));
+            //throw (new Error(``));
             // REM : testbed-ca
             await agent.generateSubCertificate('nrd-testbed/ca', {
                 ca:      'root/ca',
@@ -38,28 +38,28 @@ module.exports = async function ({agent, config}) {
             });
         } // if (shield)
 
-        if (true) {
+        if (false) {
             debugger;
             throw (new Error(``));
             // REM : testbed 'tb'
             await agent.generateClientCertificate('nrd-testbed/tb/tls-server/server', {
                 ca:      'nrd-testbed/ca',
-                subject: {C, ST, L, O, CN: ['tb', 'tls_server']}
+                subject: {C, ST, L, O, CN: ['tb', 'testbed.nicos-rd.com']}
             });
 
             // REM : testsuite 'ts'
             await agent.generateClientCertificate('nrd-testbed/ts/tls-server/server', {
                 ca:      'nrd-testbed/ca',
-                subject: {C, ST, L, O, CN: ['ts', 'tls_server']}
+                subject: {C, ST, L, O, CN: ['ts', 'testsuite.nicos-rd.com']}
             });
-        } // if (shield=
+        } // if (shield)
 
         //region TEST tb.ec
         //region TEST tb.ec.ids
 
         let cert_config = {};
 
-        if (true) {
+        if (false) {
             debugger;
             throw (new Error(``));
             // REM: participant ca
@@ -74,12 +74,6 @@ module.exports = async function ({agent, config}) {
             });
         } // if (shield)
 
-        // REM : io :: ids to Alice, Bob
-        await agent.generateClientCertificate('nrd-testbed/ec/ids/component/io/client', {
-            ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'io']}
-        });
-
         // REM : nrd-daps
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/daps_nrd/connector/client', {
             ca:      'nrd-testbed/ec/ids/component/ca',
@@ -87,7 +81,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/daps_nrd/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_daps_nrd_tls-server']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'nrd-daps.nicos-rd.com']}
         });
 
         // REM : omejdn-daps
@@ -97,7 +91,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/daps_fh_omejdn/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_daps_fh_omejdn_tls-server']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'omejdn-daps.nicos-rd.com']}
         });
 
         // REM : Meta Data Broker
@@ -107,7 +101,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/mdb_fh_mdb/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'ec_ids_mdb_fh_mdb_tls-server']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'mdb-fh.nicos-rd.com']}
         });
 
         // REM : ParIS
@@ -117,7 +111,7 @@ module.exports = async function ({agent, config}) {
          });
          await agent.generateClientCertificate('nrd-testbed/ec/ids/paris/tls-server/server', {
              ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'ec_ids_paris_tls-server']}
+             subject: {C, ST, O, CN: ['tb', 'paris-fh.nicos-rd.com']}
          });
 
         // REM : Clearing House
@@ -127,7 +121,7 @@ module.exports = async function ({agent, config}) {
          });
          await agent.generateClientCertificate('nrd-testbed/ec/ids/ch/tls-server/server', {
              ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'ec_ids_ch_connector']}
+             subject: {C, ST, O, CN: ['tb', 'nrd-ch.nicos-rd.com']}
          });
 
         // REM : DTM
@@ -137,7 +131,7 @@ module.exports = async function ({agent, config}) {
          });
          await agent.generateClientCertificate('nrd-testbed/ec/ids/dtm/tls-server/server', {
              ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'ec_ids_dtm_tls-server']}
+             subject: {C, ST, O, CN: ['tb', 'nrd-dtm.nicos-rd.com']}
          });
 
         // REM : ALICE
@@ -147,7 +141,7 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/alice/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'https://alice.nicos-rd.com/']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'alice.nicos-rd.com']}
         });
 
         // REM : BOB
@@ -157,18 +151,8 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/component/bob/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'https://bob.nicos-rd.com/']}
+            subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'bob.nicos-rd.com']}
         });
-
-        // REM : Data Space Connector
-         await agent.generateClientCertificate('nrd-testbed/ec/ids/dsc/connector/client', {
-             ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'ec_ids_dsc_connector']}
-         });
-         await agent.generateClientCertificate('nrd-testbed/ec/ids/dsc/tls-server/server', {
-             ca:      'nrd-testbed/ec/ids/component/ca',
-             subject: {C, ST, O, CN: ['tb', 'https://ids-dsc.nicos-rd.com/']}
-         });
 
         //region TEST tb.ec.ids : cut (applicant)
 
@@ -179,18 +163,18 @@ module.exports = async function ({agent, config}) {
         });
         await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/nrd_gbx-03/tls-server/server', {
             ca:      'nrd-testbed/ec/ids/component/ca',
-            subject: {C, ST, O, CN: ['tb', 'ec_ids_connector_nrd_gbx-03_tls-server']}
+            subject: {C, ST, O, CN: ['tb', 'gbx.nicos-rd.com']}
         });
 
-        //// REM : Data Space Connector (dsc)
-        //await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/connector/client', {
-        //    ca:      'nrd-testbed/ec/ids/component/ca',
-        //    subject: {C, ST, L, O, CN: ['tb', 'ec', 'ids', 'cut', 'ec_ids_connector_fh_dsc']}
-        //});
-        //await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/fh_dsc/tls-server/server', {
-        //    ca:      'nrd-testbed/ec/ids/component/ca',
-        //    subject: {C, ST, O, CN: ['tb', 'ec_ids_fh_connector_dsc_tls-server']}
-        //});
+        // REM : Data Space Connector
+        await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/dsc/connector/client', {
+            ca:      'nrd-testbed/ec/ids/component/ca',
+            subject: {C, ST, O, CN: ['tb', 'ec_ids_dsc_connector']}
+        });
+        await agent.generateClientCertificate('nrd-testbed/ec/ids/cut/dsc/tls-server/server', {
+            ca:      'nrd-testbed/ec/ids/component/ca',
+            subject: {C, ST, O, CN: ['tb', 'ids-dsc.nicos-rd.com']}
+        });
 
         //endregion TEST tb.ec.ids : cut (applicant)
 
