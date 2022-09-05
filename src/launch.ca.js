@@ -7,7 +7,7 @@ const
 (async function Main() {
 
     const
-        {param} = util.parseArgv(),
+        param = util.parseArgv(),
         caAgent = new CAAgent({
             cwd: path.join(__dirname, '../resources'),
             //verbose: !!(param.verbose)
