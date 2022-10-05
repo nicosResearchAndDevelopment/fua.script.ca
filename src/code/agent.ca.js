@@ -300,7 +300,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateJavaScriptLoader
 
     async generateRootCertificate(file, options) {
-        console.log('generate root certificate: ' + file);
+        util.logText('generate root certificate: ' + file);
         await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
         await util.touchFile(util.resolvePath(file + _ext.certificateConfig, this.#cwd));
         await this.generatePrivateKey(file, options);
@@ -309,7 +309,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateRootCertificate
 
     async generateSubCertificate(file, options) {
-        console.log('generate sub certificate: ' + file);
+        util.logText('generate sub certificate: ' + file);
         await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
         await fs.copyFile(
             util.resolvePath(options.ca + _ext.certificateConfig, this.#cwd),
@@ -323,7 +323,7 @@ module.exports = class CAAgent extends EventEmitter {
     } // CAAgent#generateSubCertificate
 
     async generateClientCertificate(file, options) {
-        console.log('generate client certificate: ' + file);
+        util.logText('generate client certificate: ' + file);
         await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
         await this.generatePrivateKey(file, options);
         await this.generatePublicKey(file, options);

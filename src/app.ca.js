@@ -9,14 +9,17 @@ const
  */
 module.exports = async function ({agent, config}) {
 
-    const defaults = Object.freeze({
-        subject: Object.freeze({
+    const defaults = {
+        ca:      'root/ca',
+        subject: {
             C:  'DE',
             ST: 'NRW',
             L:  'Muenster',
             O:  'nicos Research & Development GmbH'
-        })
-    });
+        }
+    };
+
+    util.freezeAllProp(defaults, Infinity);
 
     for (let target of util.toArray(config.generate)) {
         const generator = generators[target];

@@ -18,4 +18,6 @@ const
         config: param
     });
 
+    util.logDone();
+
 })().catch(console.error);

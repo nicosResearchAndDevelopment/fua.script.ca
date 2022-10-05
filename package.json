@@ -9,7 +9,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/launch.ca.js",
-    "generate-example": "node ./src/launch.ca.js --generate develop-spe/test/client --verbose"
+    "generate:develop-spe": "npm start -- --generate develop-spe",
+    "generate:nrd-testbed": "npm start -- --generate nrd-testbed",
+    "generate:nrd-testbed/ec/ids": "npm start -- --generate nrd-testbed/ec/ids",
+    "generate:nrd-testbed/ec/ids/component/alice+bob": "npm start -- --generate nrd-testbed/ec/ids/component/alice --generate nrd-testbed/ec/ids/component/bob"
   },
   "repository": {
     "type": "git",

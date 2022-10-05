@@ -2,12 +2,17 @@ const
     generators = exports,
     util       = require('../util.ca.js');
 
+generators['develop-spe'] = async function (param) {
+    await generators['develop-spe/test'](param);
+};
+
+generators['develop-spe/ca'] = async function (param) {
+    await generators['develop-spe/test/ca'](param);
+};
+
 generators['develop-spe/test'] = async function (param) {
-    await Promise.all([
-        generators['develop-spe/test/ca'](param),
-        generators['develop-spe/test/client'](param),
-        generators['develop-spe/test/server'](param)
-    ]);
+    await generators['develop-spe/test/client'](param);
+    await generators['develop-spe/test/server'](param);
 };
 
 generators['develop-spe/test/ca'] = async function ({agent, defaults}) {
