@@ -272,12 +272,15 @@ module.exports = class CAAgent extends EventEmitter {
             certificate     = await fs.readFile(filePath + _ext.certificate, {encoding: 'utf-8'}),
             certificateText = await fs.readFile(filePath + _ext.certificateText, {encoding: 'utf-8'}),
             metadata        = {},
+            Issuer_match    = /Issuer:\s*(.*(?=[\r\n]))/.exec(certificateText),
+            Subject_match   = /Subject:\s*(.*(?=[\r\n]))/.exec(certificateText),
             SKI_match       = /X509v3 Subject Key Identifier:\s*(\S+(?=\s))/.exec(certificateText),
             AKI_match       = /X509v3 Authority Key Identifier:\s*(\S+(?=\s))/.exec(certificateText);
+        if (Issuer_match) metadata.Issuer = Issuer_match[1];
+        if (Subject_match) metadata.Subject = Subject_match[1];
         if (SKI_match) metadata.SKI = SKI_match[1];
         if (AKI_match) metadata.AKI = AKI_match[1];
-        metadata.SKIAKI                = metadata.SKI + ":" + metadata.AKI;
-        metadata.SKIAKI_id_leave       = metadata.SKIAKI.replace(/:/g, "_");
+        metadata.SKIAKI                = metadata.SKI + ':' + metadata.AKI;
         metadata.certSha256Fingerprint = util.createCertificateSha256Fingerprint(certificate);
         await fs.writeFile(filePath + _ext.jsonMetadata, JSON.stringify(metadata, null, 4));
     } // CAAgent#generateJsonMetadata

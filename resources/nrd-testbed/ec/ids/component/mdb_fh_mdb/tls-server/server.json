@@ -1,7 +1,8 @@
 {
+    "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = ec_ids_component_ca",
+    "Subject": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = mdb-fh.nicos-rd.com",
     "SKI": "44:F6:50:87:DD:51:1B:38:61:C9:00:94:A5:91:B6:EF:83:8D:A9:38",
     "AKI": "keyid:B2:86:93:B9:34:0F:6F:CA:D4:1A:C0:3E:C6:BF:E1:A0:A0:D0:ED:5E",
     "SKIAKI": "44:F6:50:87:DD:51:1B:38:61:C9:00:94:A5:91:B6:EF:83:8D:A9:38:keyid:B2:86:93:B9:34:0F:6F:CA:D4:1A:C0:3E:C6:BF:E1:A0:A0:D0:ED:5E",
-    "SKIAKI_id_leave": "44_F6_50_87_DD_51_1B_38_61_C9_00_94_A5_91_B6_EF_83_8D_A9_38_keyid_B2_86_93_B9_34_0F_6F_CA_D4_1A_C0_3E_C6_BF_E1_A0_A0_D0_ED_5E",
     "certSha256Fingerprint": "d5b5a923f9383d6c9c053d4907c3d8dec6e5d4dba384c236113715218b44f005"
 }
