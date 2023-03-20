@@ -2,6 +2,7 @@ const
     _util      = require('@nrd/fua.core.util'),
     path       = require('path'),
     fs         = require('fs/promises'),
+    crypto     = require('crypto'),
     subprocess = require('@nrd/fua.module.subprocess'),
     util       = exports = module.exports = {
         ..._util,
@@ -33,5 +34,23 @@ util.touchFile = async function (file) {
         await fs.writeFile(file, '');
     }
 }; // touchFile
+
+util.createSha256Hash = function (content, inputEncoding = 'utf8', outputEncoding = 'base64') {
+    const hash = crypto.createHash('sha256');
+    hash.update(content, inputEncoding);
+    return hash.digest(outputEncoding);
+};
+
+util.normalizeCertificate = function (certificate) {
+    return certificate.split('\n')
+        .filter(line => !line.includes('-----'))
+        .map(line => line.trim())
+        .join('');
+};
+
+util.createCertificateSha256Fingerprint = function (certificate) {
+    const normalized = util.normalizeCertificate(certificate);
+    return util.createSha256Hash(normalized, 'base64', 'hex');
+};
 
 module.exports = util;
