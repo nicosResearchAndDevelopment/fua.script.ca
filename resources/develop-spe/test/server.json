@@ -1,6 +1,8 @@
 {
-    "SKI": "AA:9D:0D:7F:A7:F1:25:14:E1:AD:87:C1:8F:E4:B8:94:CC:8A:32:49",
-    "AKI": "keyid:74:42:D6:D0:71:88:73:11:4C:64:55:11:88:C5:14:29:37:DE:48:9F",
-    "SKIAKI": "AA:9D:0D:7F:A7:F1:25:14:E1:AD:87:C1:8F:E4:B8:94:CC:8A:32:49:keyid:74:42:D6:D0:71:88:73:11:4C:64:55:11:88:C5:14:29:37:DE:48:9F",
-    "SKIAKI_id_leave": "AA_9D_0D_7F_A7_F1_25_14_E1_AD_87_C1_8F_E4_B8_94_CC_8A_32_49_keyid_74_42_D6_D0_71_88_73_11_4C_64_55_11_88_C5_14_29_37_DE_48_9F"
+    "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = develop-spe-test-ca",
+    "Subject": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = develop-spe-test-server, CN = localhost",
+    "SKI": "EA:9C:F2:DD:25:F7:0F:DA:6B:28:C9:A3:F7:AF:EF:21:96:7A:7E:B1",
+    "AKI": "keyid:5A:6B:61:F4:A7:20:BA:84:25:E6:72:C6:1D:30:AC:1D:10:14:D5:7B",
+    "SKIAKI": "EA:9C:F2:DD:25:F7:0F:DA:6B:28:C9:A3:F7:AF:EF:21:96:7A:7E:B1:keyid:5A:6B:61:F4:A7:20:BA:84:25:E6:72:C6:1D:30:AC:1D:10:14:D5:7B",
+    "certSha256Fingerprint": "f5d4fa6396865b88943abc1144d1b9cb650ac426b144acc29771f1e4fb1f3e12"
 }

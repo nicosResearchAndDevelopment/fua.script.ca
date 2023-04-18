@@ -1,8 +1,8 @@
 {
     "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = ec_ids_component_ca",
     "Subject": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = omejdn-daps.nicos-rd.com",
-    "SKI": "97:86:D5:29:22:1A:04:EE:DA:20:D7:1E:16:8D:01:66:8F:7F:C2:E0",
-    "AKI": "keyid:B2:86:93:B9:34:0F:6F:CA:D4:1A:C0:3E:C6:BF:E1:A0:A0:D0:ED:5E",
-    "SKIAKI": "97:86:D5:29:22:1A:04:EE:DA:20:D7:1E:16:8D:01:66:8F:7F:C2:E0:keyid:B2:86:93:B9:34:0F:6F:CA:D4:1A:C0:3E:C6:BF:E1:A0:A0:D0:ED:5E",
-    "certSha256Fingerprint": "5c1ba2b642d74e70684042ddb0adbe1d149ef300ecbdbba630d8c8ab36865c96"
+    "SKI": "95:01:DE:E4:62:56:1A:51:9A:48:15:DB:ED:CE:CE:48:04:5D:BB:9A",
+    "AKI": "keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
+    "SKIAKI": "95:01:DE:E4:62:56:1A:51:9A:48:15:DB:ED:CE:CE:48:04:5D:BB:9A:keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
+    "certSha256Fingerprint": "e6a9669955bc33d9783a3d4b958c5226ae8c273fb5ac8747f2c4904d6a37bab6"
 }
