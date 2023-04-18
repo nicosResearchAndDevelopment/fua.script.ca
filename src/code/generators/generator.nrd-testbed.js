@@ -67,6 +67,7 @@ generators['nrd-testbed/ec/ids']
     = async function (param) {
     await generators['nrd-testbed/ec/ids/participant'](param);
     await generators['nrd-testbed/ec/ids/component'](param);
+    await generators['nrd-testbed/ec/ids/cut'](param);
 };
 
 generators['nrd-testbed/ec/ids/ca']
