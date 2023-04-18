@@ -17,7 +17,10 @@ generators['nrd-testbed/ca']
             ...defaults.subject,
             CN: ['tb', 'tb_ca']
         },
-        extensions: 'root_extension'
+        extensions: 'root_extension',
+        expiration: {
+            years: 10
+        }
     });
     await generators['nrd-testbed/ec/ids/participant/ca']({agent, config, defaults});
     await generators['nrd-testbed/ec/ids/component/ca']({agent, config, defaults});
@@ -80,7 +83,10 @@ generators['nrd-testbed/ec/ids/participant/ca']
             ...defaults.subject,
             CN: ['tb', 'ec', 'ids', 'ec_ids_participant_ca']
         },
-        extensions: 'root_extension'
+        extensions: 'root_extension',
+        expiration: {
+            years: 10
+        }
     });
 };
 
@@ -97,7 +103,10 @@ generators['nrd-testbed/ec/ids/component/ca']
             ...defaults.subject,
             CN: ['tb', 'ec', 'ids', 'ec_ids_component_ca']
         },
-        extensions: 'root_extension'
+        extensions: 'root_extension',
+        expiration: {
+            years: 10
+        }
     });
 };
 

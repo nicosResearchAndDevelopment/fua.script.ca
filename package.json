@@ -9,8 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/launch.ca.js",
+    "generate:root/ca": "npm start -- --generate root/ca",
     "generate:develop-spe": "npm start -- --generate develop-spe",
+    "generate:develop-spe/ca": "npm start -- --generate develop-spe/ca",
     "generate:nrd-testbed": "npm start -- --generate nrd-testbed",
+    "generate:nrd-testbed/ca": "npm start -- --generate nrd-testbed/ca",
     "generate:nrd-testbed/ec/ids": "npm start -- --generate nrd-testbed/ec/ids",
     "generate:nrd-testbed/ec/ids/component/alice+bob": "npm start -- --generate nrd-testbed/ec/ids/component/alice --generate nrd-testbed/ec/ids/component/bob",
     "generate:nrd-testbed/ec/ids/component/alice+bob/tls-server/server": "npm start -- --generate nrd-testbed/ec/ids/component/alice/tls-server/server --generate nrd-testbed/ec/ids/component/bob/tls-server/server",

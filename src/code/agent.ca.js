@@ -171,6 +171,12 @@ function _serializeDistinguishedName(dn) {
     }
 } // _serializeDistinguishedName
 
+function _calculateExpirationDays(exp) {
+    const seconds = util.duration(exp);
+    util.assert(seconds > 0 && seconds < Infinity, 'expected to be a positive number');
+    return Math.floor(seconds / 86400) || 1;
+}
+
 module.exports = class CAAgent extends EventEmitter {
 
     #cwd     = '';
@@ -204,7 +210,7 @@ module.exports = class CAAgent extends EventEmitter {
             batch: !options?.subject,
             subj:  _serializeDistinguishedName(options?.subject) || false,
             key:   file + _ext.privateKey,
-            days:  825,
+            days:  options?.expiration && _calculateExpirationDays(options.expiration) || 825,
             out:   file + _ext.certificate
         });
     } // CAAgent#generateSelfSignedCertificate
@@ -226,7 +232,7 @@ module.exports = class CAAgent extends EventEmitter {
             CAcreateserial: true,
             CA:             options.ca + _ext.certificate,
             CAkey:          options.ca + _ext.privateKey,
-            days:           398,
+            days:           options?.expiration && _calculateExpirationDays(options.expiration) || 398,
             in:             file + _ext.signingRequest,
             out:            file + _ext.certificate,
             extfile:        options.ca + _ext.certificateConfig,

@@ -7,9 +7,12 @@ Object.assign(generators, require('./generators/generator.nrd-testbed.js'));
 
 generators['root/ca'] = async function ({agent, config, defaults}) {
     await agent.generateRootCertificate('root/ca', {
-        subject: {
+        subject:    {
             ...defaults.subject,
             commonName: 'root_ca'
+        },
+        expiration: {
+            years: 20
         }
     });
     await generators['develop-spe/ca']({agent, config, defaults});
