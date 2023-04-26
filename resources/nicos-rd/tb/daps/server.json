@@ -1,0 +1,8 @@
+{
+    "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = nicos-rd",
+    "Subject": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = daps.tb.nicos-rd.com",
+    "SKI": "56:E9:56:1F:6D:AA:9B:DB:5E:D6:8B:89:63:9A:C7:57:31:D2:C3:00",
+    "AKI": "keyid:EE:72:87:D9:75:A9:53:82:2C:EF:9D:3A:F9:FD:C5:37:1F:A8:94:AE",
+    "SKIAKI": "56:E9:56:1F:6D:AA:9B:DB:5E:D6:8B:89:63:9A:C7:57:31:D2:C3:00:keyid:EE:72:87:D9:75:A9:53:82:2C:EF:9D:3A:F9:FD:C5:37:1F:A8:94:AE",
+    "certSha256Fingerprint": "1edddcdc46d64476e634172f43a4f5daf5094c34b1c88205dd1386b2df4bd159"
+}
