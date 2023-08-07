@@ -1,5 +1,5 @@
 {
-  "name": "@nrd/fua.app.ca",
+  "name": "@nrd/fua.script.ca",
   "version": "1.0.0",
   "description": "nicos Research & Development - Certificate Authority",
   "dependencies": {
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@git02.int.nsc.ag:10022/research/fua/app/ca.git"
+    "url": "ssh://git@git02.int.nsc.ag:10022/research/fua/script/ca.git"
   },
   "keywords": [
     "ca",
