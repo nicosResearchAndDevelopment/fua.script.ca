@@ -4,6 +4,7 @@ const
 
 Object.assign(generators, require('./generators/generator.develop-spe.js'));
 Object.assign(generators, require('./generators/generator.nrd-testbed.js'));
+Object.assign(generators, require('./generators/generator.nrd-testbed.cut.js'));
 Object.assign(generators, require('./generators/generator.nicos-rd.js'));
 
 generators['root/ca'] = async function ({agent, config, defaults}) {

@@ -1,0 +1,8 @@
+{
+    "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = ec_ids_component_ca",
+    "Subject": "C = DE, O = Fraunhofer e.V., OU = FIT, CN = *.fit.fraunhofer.de",
+    "SKI": "65:9B:7E:0B:96:6B:88:98:63:51:39:60:D6:93:1E:B8:00:52:25:0C",
+    "AKI": "keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
+    "SKIAKI": "65:9B:7E:0B:96:6B:88:98:63:51:39:60:D6:93:1E:B8:00:52:25:0C:keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
+    "certSha256Fingerprint": "211b2ba9786c5023cdfa3f59cd1e95e3327ce2487e0e50c3082c8a3393a355be"
+}
