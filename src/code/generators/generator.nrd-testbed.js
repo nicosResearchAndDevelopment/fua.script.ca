@@ -2,6 +2,8 @@ const
     generators = exports,
     util       = require('../util.ca.js');
 
+Object.assign(generators, require('./generator.nrd-testbed.cut.js'));
+
 generators['nrd-testbed']
     = async function (param) {
     await generators['nrd-testbed/tb'](param);
