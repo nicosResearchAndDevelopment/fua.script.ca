@@ -5,7 +5,7 @@ const
 
 async.iife(async function generateFiwareCertificates() {
 
-    tty.log.warning('generate: testbed/cut/fiware');
+    tty.log.warning('generate testbed/cut/fiware');
 
     await CA.generateMinimalClientCertificate('testbed/cut/fiware/dev/client', {
         ca:      'testbed/ca',

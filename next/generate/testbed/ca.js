@@ -5,7 +5,7 @@ const
 
 async.iife(async function generateTestbedCA() {
 
-    tty.log.warning('generate: testbed/ca');
+    tty.log.warning('generate testbed/ca');
 
     await CA.generateSubCertificate('testbed/ca', {
         ca:         'root/ca',

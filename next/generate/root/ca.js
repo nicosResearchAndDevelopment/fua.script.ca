@@ -5,7 +5,7 @@ const
 
 async.iife(async function generateRootCA() {
 
-    tty.log.warning('generate: root/ca');
+    tty.log.warning('generate root/ca');
 
     await CA.generateRootCertificate('root/ca', {
         subject:    {
