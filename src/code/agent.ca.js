@@ -346,6 +346,20 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateJavaScriptLoader(file, options);
     } // CAAgent#generateClientCertificate
 
+    // TODO custom client-output method without JS, JSON and CSR but with a README that describes the folder content and DAPS endpoints and JSON content and creation date
+    // async generateMinimalClientCertificate(file, options) {
+    //     util.logText('generate client certificate: ' + file);
+    //     await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
+    //     await this.generatePrivateKey(file, options);
+    //     await this.generatePublicKey(file, options);
+    //     await this.generateCertificateSigningRequest(file, options);
+    //     await this.generateSignedCertificate(file, options);
+    //     await this.generateCertificateAuthorityBundle(file, options);
+    //     await this.generateCertificateReadableText(file, options);
+    //     await this.generateJsonMetadata(file, options);
+    //     await this.generateJavaScriptLoader(file, options);
+    // } // CAAgent#generateMinimalClientCertificate
+
     async readPrivateKey(file) {
         const filePath = util.resolvePath(file + _ext.privateKey, this.#cwd);
         return await fs.readFile(filePath, {encoding: 'utf-8'});

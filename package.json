@@ -24,6 +24,7 @@
     "generate:nrd-testbed/ec/ids/cut/WNW/IMW": "npm start -- --generate nrd-testbed/ec/ids/cut/WNW/IMW",
     "generate:nrd-testbed/ec/ids/cut/DBX": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX",
     "generate:nrd-testbed/ec/ids/cut/DBX/SWC": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/SWC",
+    "generate:nrd-testbed/ec/ids/cut/DBX/SIE": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/SIE",
     "generate:nrd-testbed/ec/ids/cut/DBX/DUM": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/DUM",
     "generate:nicos-rd": "npm start -- --generate nicos-rd",
     "generate:nicos-rd/ca": "npm start -- --generate nicos-rd/ca",
