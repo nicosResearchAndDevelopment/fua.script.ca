@@ -1,8 +1,8 @@
 {
     "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = tb, CN = ec, CN = ids, CN = ec_ids_component_ca",
-    "Subject": "C = AT, O = Siemens Energy Austria GmbH, CN = *.siemens-energy.com",
-    "SKI": "45:1A:78:D3:41:D1:7C:A0:4A:B3:BD:DD:E0:45:21:20:70:9D:C2:DC",
+    "Subject": "C = AT, O = Siemens AG \\C3\\83\\C2\\96sterreich, CN = *.siemens.com",
+    "SKI": "11:4D:F2:7C:64:9C:D4:13:AB:4F:D6:F8:2A:D1:B8:51:76:E1:63:C6",
     "AKI": "keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
-    "SKIAKI": "45:1A:78:D3:41:D1:7C:A0:4A:B3:BD:DD:E0:45:21:20:70:9D:C2:DC:keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
-    "certSha256Fingerprint": "8d610f0518ba43e733b56dfcc77f3ead502238f4364e86a066391cbdb31aa721"
+    "SKIAKI": "11:4D:F2:7C:64:9C:D4:13:AB:4F:D6:F8:2A:D1:B8:51:76:E1:63:C6:keyid:07:E8:AA:9F:59:23:93:EE:0D:26:0F:29:3B:53:2D:0B:98:11:46:8F",
+    "certSha256Fingerprint": "58611144cfc8a96f1ad6fc859dd67dc4763838b3f892a878dd95c91ce1b95cc1"
 }

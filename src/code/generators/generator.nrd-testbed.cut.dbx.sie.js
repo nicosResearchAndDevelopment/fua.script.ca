@@ -21,8 +21,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/1/connector/client']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
@@ -33,8 +33,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/1/tls-server/server']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
@@ -51,8 +51,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/2/connector/client']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
@@ -63,8 +63,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/2/tls-server/server']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
@@ -81,8 +81,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/3/connector/client']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
@@ -93,8 +93,8 @@ generators['nrd-testbed/ec/ids/cut/DBX/SIE/3/tls-server/server']
         ca:      'nrd-testbed/ec/ids/component/ca',
         subject: {
             country:      'AT',
-            organization: 'Siemens Energy Austria GmbH',
-            commonName:   '*.siemens-energy.com'
+            organization: 'Siemens AG Österreich',
+            commonName:   '*.siemens.com'
         }
     });
 };
