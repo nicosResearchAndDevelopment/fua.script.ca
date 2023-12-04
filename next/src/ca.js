@@ -455,7 +455,7 @@ CA.generateJsonMetadata = async function (file, options = {}) {
  * @param {Record} options
  * @returns {Promise<void>}
  */
-generateJavaScriptLoader = async function (file, options = {}) {
+CA.generateJavaScriptLoader = async function (file, options = {}) {
     assert.string(file);
     assert.object(options);
     const
@@ -537,9 +537,9 @@ CA.generateRootCertificate = async function (file, options = {}) {
     tty.log.text('generate root certificate: ' + file);
     await _CA.touchFolder(path.dirname(_CA.getOutputPath(file)));
     await _CA.touchFile(_CA.getOutputPath(file + _CA.extentions.certificateConfig));
-    await this.generatePrivateKey(file, options);
-    await this.generateSelfSignedCertificate(file, options);
-    await this.generateCertificateReadableText(file, options);
+    await CA.generatePrivateKey(file, options);
+    await CA.generateSelfSignedCertificate(file, options);
+    await CA.generateCertificateReadableText(file, options);
 };
 
 /**
@@ -557,11 +557,11 @@ CA.generateSubCertificate = async function (file, options = {}) {
         _CA.getOutputPath(file + _CA.extentions.certificateConfig)
     );
     await _CA.git('add', file + _CA.extentions.certificateConfig);
-    await this.generatePrivateKey(file, options);
-    await this.generateCertificateSigningRequest(file, options);
-    await this.generateSignedCertificate(file, options);
-    await this.generateCertificateAuthorityBundle(file, options);
-    await this.generateCertificateReadableText(file, options);
+    await CA.generatePrivateKey(file, options);
+    await CA.generateCertificateSigningRequest(file, options);
+    await CA.generateSignedCertificate(file, options);
+    await CA.generateCertificateAuthorityBundle(file, options);
+    await CA.generateCertificateReadableText(file, options);
 };
 
 /**
@@ -574,14 +574,14 @@ CA.generateClientCertificate = async function (file, options = {}) {
     assert.object(options);
     tty.log.text('generate client certificate: ' + file);
     await _CA.touchFolder(path.dirname(_CA.getOutputPath(file)));
-    await this.generatePrivateKey(file, options);
-    await this.generatePublicKey(file, options);
-    await this.generateCertificateSigningRequest(file, options);
-    await this.generateSignedCertificate(file, options);
-    await this.generateCertificateAuthorityBundle(file, options);
-    await this.generateCertificateReadableText(file, options);
-    await this.generateJsonMetadata(file, options);
-    await this.generateJavaScriptLoader(file, options);
+    await CA.generatePrivateKey(file, options);
+    await CA.generatePublicKey(file, options);
+    await CA.generateCertificateSigningRequest(file, options);
+    await CA.generateSignedCertificate(file, options);
+    await CA.generateCertificateAuthorityBundle(file, options);
+    await CA.generateCertificateReadableText(file, options);
+    await CA.generateJsonMetadata(file, options);
+    await CA.generateJavaScriptLoader(file, options);
 };
 
 /**
@@ -589,17 +589,19 @@ CA.generateClientCertificate = async function (file, options = {}) {
  * @param {Record} options
  * @returns {Promise<void>}
  */
-CA.generateMinimalClientCertificate = async function (file, options = {}) {
+CA.generateCustomerCertificate = async function (file, options = {}) {
     assert.string(file);
     assert.object(options);
-    tty.log.text('generate minimal client certificate: ' + file);
+    tty.log.text('generate customer certificate: ' + file);
     await _CA.touchFolder(path.dirname(_CA.getOutputPath(file)));
-    await this.generatePrivateKey(file, options);
-    await this.generateCertificateSigningRequest(file, options);
-    await this.generateSignedCertificate(file, options);
-    await this.generateCertificateAuthorityBundle(file, options);
-    await this.generateCertificateReadableText(file, options);
+    await CA.generatePrivateKey(file, options);
+    await CA.generatePublicKey(file, options);
+    await CA.generateCertificateSigningRequest(file, options);
+    await CA.generateSignedCertificate(file, options);
     await fs.rm(_CA.getOutputPath(file + _CA.extentions.signingRequest));
+    await CA.generateCertificateAuthorityBundle(file, options);
+    await CA.generateCertificateReadableText(file, options);
+    await CA.generateReadmeInfos(file, options);
 };
 
 /**
@@ -648,7 +650,7 @@ CA.readCertificateText = async function (file) {
  */
 CA.loadPrivateKey = async function (file) {
     assert.string(file);
-    const fileContent = await this.readPrivateKey(file);
+    const fileContent = await CA.readPrivateKey(file);
     return crypto.createPrivateKey(fileContent);
 };
 
@@ -658,7 +660,7 @@ CA.loadPrivateKey = async function (file) {
  */
 CA.loadPublicKey = async function (file) {
     assert.string(file);
-    const fileContent = await this.readPublicKey(file);
+    const fileContent = await CA.readPublicKey(file);
     return crypto.createPublicKey(fileContent);
 };
 
