@@ -14,7 +14,8 @@ const
         certificateConfig: '.conf',
         caBundle:          '.ca',
         jsonMetadata:      '.json',
-        jsLoader:          '.js'
+        jsLoader:          '.js',
+        readmeInfos:       '.md'
     }),
     // SEE https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.4
     // SEE https://docs.oracle.com/cd/E24191_01/common/tutorials/authz_cert_attributes.html
@@ -272,7 +273,7 @@ module.exports = class CAAgent extends EventEmitter {
         await fs.writeFile(bundlePath, bundle);
     } // CAAgent#generateCertificateAuthorityBundle
 
-    async generateJsonMetadata(file, options) {
+    async extractJsonMetadata(file, options) {
         const
             filePath        = util.resolvePath(file, this.#cwd),
             certificate     = await fs.readFile(filePath + _ext.certificate, {encoding: 'utf-8'}),
@@ -286,8 +287,15 @@ module.exports = class CAAgent extends EventEmitter {
         if (Subject_match) metadata.Subject = Subject_match[1];
         if (SKI_match) metadata.SKI = SKI_match[1];
         if (AKI_match) metadata.AKI = AKI_match[1];
-        metadata.SKIAKI                = metadata.SKI + ':' + metadata.AKI;
+        if (SKI_match && AKI_match) metadata.SKIAKI = metadata.SKI + ':' + metadata.AKI;
         metadata.certSha256Fingerprint = util.createCertificateSha256Fingerprint(certificate);
+        return metadata;
+    }
+
+    async generateJsonMetadata(file, options) {
+        const
+            filePath = util.resolvePath(file, this.#cwd),
+            metadata = await this.extractJsonMetadata(file, options);
         await fs.writeFile(filePath + _ext.jsonMetadata, JSON.stringify(metadata, null, 4));
     } // CAAgent#generateJsonMetadata
 
@@ -309,6 +317,48 @@ module.exports = class CAAgent extends EventEmitter {
             ];
         await fs.writeFile(filePath + _ext.jsLoader, codeLines.join('\n'));
     } // CAAgent#generateJavaScriptLoader
+
+    async generateReadmeInfos(file, options) {
+        const
+            filePath    = util.resolvePath(file, this.#cwd),
+            fileName    = path.basename(file),
+            metadata    = await this.extractJsonMetadata(file, options),
+            capitalize  = (val) => val.charAt(0).toUpperCase() + val.slice(1),
+            Bold        = (val) => val ? '**' + val + '**' : '',
+            Code        = (val) => val ? '`' + val + '`' : '',
+            Document    = (arr) => arr.filter(val => val).join('\n\n'),
+            Title       = (val) => val ? '# ' + val : '',
+            Link        = (href, label) => '[' + (label || href) + '](' + href + ')',
+            SubTitle    = (val) => val ? '## ' + val : '',
+            List        = (arr) => arr.filter(val => val).map(val => '- ' + val).join('\n'),
+            ObjectList  = (obj) => List(Object.entries(obj).filter(([key, val]) => val).map(([key, val]) => Bold(key + ':') + ' ' + val)),
+            infoContent = Document([
+                Title(capitalize(fileName) + ' Certificate'),
+                SubTitle('Metadata'),
+                ObjectList({
+                    'Created':            new Date().toISOString(),
+                    'Issuer':             metadata.Issuer,
+                    'Subject':            metadata.Subject,
+                    'SKI':                Code(metadata.SKI),
+                    'AKI':                Code(metadata.AKI),
+                    'SKI-AKI':            Code(metadata.SKIAKI),
+                    'SHA256-Fingerprint': Code(metadata.certSha256Fingerprint)
+                }),
+                SubTitle('Files'),
+                ObjectList({
+                    'Private Key':      Link(fileName + _ext.privateKey),
+                    'Public Key':       Link(fileName + _ext.publicKey),
+                    'Certificate':      Link(fileName + _ext.certificate),
+                    'Certificate Text': Link(fileName + _ext.certificateText),
+                    'CA Chain':         Link(fileName + _ext.caBundle)
+                }),
+                SubTitle('Endpoints'),
+                ObjectList({
+                    'DAPS': Link('https://daps.tb.nicos-rd.com/')
+                })
+            ]);
+        await fs.writeFile(filePath + _ext.readmeInfos, infoContent);
+    } // CAAgent#generateReadmeInfos
 
     async generateRootCertificate(file, options) {
         util.logText('generate root certificate: ' + file);
@@ -346,19 +396,18 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateJavaScriptLoader(file, options);
     } // CAAgent#generateClientCertificate
 
-    // TODO custom client-output method without JS, JSON and CSR but with a README that describes the folder content and DAPS endpoints and JSON content and creation date
-    // async generateMinimalClientCertificate(file, options) {
-    //     util.logText('generate client certificate: ' + file);
-    //     await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
-    //     await this.generatePrivateKey(file, options);
-    //     await this.generatePublicKey(file, options);
-    //     await this.generateCertificateSigningRequest(file, options);
-    //     await this.generateSignedCertificate(file, options);
-    //     await this.generateCertificateAuthorityBundle(file, options);
-    //     await this.generateCertificateReadableText(file, options);
-    //     await this.generateJsonMetadata(file, options);
-    //     await this.generateJavaScriptLoader(file, options);
-    // } // CAAgent#generateMinimalClientCertificate
+    async generateCustomerCertificate(file, options) {
+        util.logText('generate customer certificate: ' + file);
+        await util.touchFolder(path.dirname(util.resolvePath(file, this.#cwd)));
+        await this.generatePrivateKey(file, options);
+        await this.generatePublicKey(file, options);
+        await this.generateCertificateSigningRequest(file, options);
+        await this.generateSignedCertificate(file, options);
+        await fs.rm(util.resolvePath(file + _ext.signingRequest, this.#cwd));
+        await this.generateCertificateAuthorityBundle(file, options);
+        await this.generateCertificateReadableText(file, options);
+        await this.generateReadmeInfos(file, options);
+    } // CAAgent#generateCustomerCertificate
 
     async readPrivateKey(file) {
         const filePath = util.resolvePath(file + _ext.privateKey, this.#cwd);

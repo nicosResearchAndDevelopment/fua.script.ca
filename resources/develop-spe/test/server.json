@@ -1,8 +1,8 @@
 {
     "Issuer": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = develop-spe-test-ca",
     "Subject": "C = DE, ST = NRW, L = Muenster, O = nicos Research & Development GmbH, CN = develop-spe-test-server, CN = localhost",
-    "SKI": "EA:9C:F2:DD:25:F7:0F:DA:6B:28:C9:A3:F7:AF:EF:21:96:7A:7E:B1",
+    "SKI": "AA:DC:11:5C:46:88:3E:FE:FE:52:DD:84:79:66:45:7D:F1:E8:25:5F",
     "AKI": "keyid:5A:6B:61:F4:A7:20:BA:84:25:E6:72:C6:1D:30:AC:1D:10:14:D5:7B",
-    "SKIAKI": "EA:9C:F2:DD:25:F7:0F:DA:6B:28:C9:A3:F7:AF:EF:21:96:7A:7E:B1:keyid:5A:6B:61:F4:A7:20:BA:84:25:E6:72:C6:1D:30:AC:1D:10:14:D5:7B",
-    "certSha256Fingerprint": "f5d4fa6396865b88943abc1144d1b9cb650ac426b144acc29771f1e4fb1f3e12"
+    "SKIAKI": "AA:DC:11:5C:46:88:3E:FE:FE:52:DD:84:79:66:45:7D:F1:E8:25:5F:keyid:5A:6B:61:F4:A7:20:BA:84:25:E6:72:C6:1D:30:AC:1D:10:14:D5:7B",
+    "certSha256Fingerprint": "36012e18f52c76b001a7a3793a1c043b36c3ed0b2448593658e06906416dadae"
 }

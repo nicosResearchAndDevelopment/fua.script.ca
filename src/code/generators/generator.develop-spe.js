@@ -27,7 +27,7 @@ generators['develop-spe/test/ca'] = async function ({agent, defaults}) {
 };
 
 generators['develop-spe/test/client'] = async function ({agent, defaults}) {
-    await agent.generateClientCertificate('develop-spe/test/client', {
+    await agent.generateCustomerCertificate('develop-spe/test/client', {
         ca:      'develop-spe/test/ca',
         subject: {
             ...defaults.subject,
