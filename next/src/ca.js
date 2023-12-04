@@ -39,7 +39,8 @@ _CA.extentions = Object.freeze({
     caBundle:          '.ca',
     caSerial:          '.srl',
     jsonMetadata:      '.json',
-    jsLoader:          '.js'
+    jsLoader:          '.js',
+    readmeInfos:       '.md'
 });
 
 /**
@@ -412,12 +413,10 @@ CA.generateCertificateAuthorityBundle = async function (file, options = {}) {
 
 /**
  * @param {string} file
- * @param {Record} options
- * @returns {Promise<void>}
+ * @returns {Promise<Record<string, string>>}
  */
-CA.generateJsonMetadata = async function (file, options = {}) {
+CA.extractJsonMetadata = async function (file) {
     assert.string(file);
-    assert.object(options);
     const
         metadataPath    = _CA.getOutputPath(file),
         certificate     = await fs.readFile(metadataPath + _CA.extentions.certificate, 'utf-8'),
@@ -431,8 +430,22 @@ CA.generateJsonMetadata = async function (file, options = {}) {
     if (Subject_match) metadata.Subject = Subject_match[1];
     if (SKI_match) metadata.SKI = SKI_match[1];
     if (AKI_match) metadata.AKI = AKI_match[1];
-    metadata.SKIAKI                = metadata.SKI + ':' + metadata.AKI;
+    if (SKI_match && AKI_match) metadata.SKIAKI = metadata.SKI + ':' + metadata.AKI;
     metadata.certSha256Fingerprint = _CA.createCertificateSha256Fingerprint(certificate);
+    return metadata;
+};
+
+/**
+ * @param {string} file
+ * @param {Record} options
+ * @returns {Promise<void>}
+ */
+CA.generateJsonMetadata = async function (file, options = {}) {
+    assert.string(file);
+    assert.object(options);
+    const
+        metadataPath = _CA.getOutputPath(file),
+        metadata     = await CA.extractJsonMetadata(file);
     await fs.writeFile(metadataPath + _CA.extentions.jsonMetadata, JSON.stringify(metadata, null, 4));
     await _CA.git('add', metadataPath + _CA.extentions.jsonMetadata);
 };
@@ -442,7 +455,7 @@ CA.generateJsonMetadata = async function (file, options = {}) {
  * @param {Record} options
  * @returns {Promise<void>}
  */
-CA.generateJavaScriptLoader = async function (file, options = {}) {
+generateJavaScriptLoader = async function (file, options = {}) {
     assert.string(file);
     assert.object(options);
     const
@@ -462,6 +475,55 @@ CA.generateJavaScriptLoader = async function (file, options = {}) {
         ];
     await fs.writeFile(filePath + _CA.extentions.jsLoader, codeLines.join('\n'));
     await _CA.git('add', filePath + _CA.extentions.jsLoader);
+};
+
+/**
+ * @param {string} file
+ * @param {Record} options
+ * @returns {Promise<void>}
+ */
+CA.generateReadmeInfos = async function (file, options = {}) {
+    assert.string(file);
+    assert.object(options);
+    const
+        filePath    = _CA.getOutputPath(file),
+        fileName    = path.basename(file),
+        metadata    = await CA.extractJsonMetadata(file),
+        capitalize  = (val) => val.charAt(0).toUpperCase() + val.slice(1),
+        Bold        = (val) => val ? '**' + val + '**' : '',
+        Code        = (val) => val ? '`' + val + '`' : '',
+        Document    = (arr) => arr.filter(val => val).join('\n\n'),
+        Title       = (val) => val ? '# ' + val : '',
+        Link        = (href, label) => '[' + (label || href) + '](' + href + ')',
+        SubTitle    = (val) => val ? '## ' + val : '',
+        List        = (arr) => arr.filter(val => val).map(val => '- ' + val).join('\n'),
+        ObjectList  = (obj) => List(Object.entries(obj).filter(([key, val]) => val).map(([key, val]) => Bold(key + ':') + ' ' + val)),
+        infoContent = Document([
+            Title(capitalize(fileName) + ' Certificate'),
+            SubTitle('Metadata'),
+            ObjectList({
+                'Created':            new Date().toISOString(),
+                'Issuer':             metadata.Issuer,
+                'Subject':            metadata.Subject,
+                'SKI':                Code(metadata.SKI),
+                'AKI':                Code(metadata.AKI),
+                'SKI-AKI':            Code(metadata.SKIAKI),
+                'SHA256-Fingerprint': Code(metadata.certSha256Fingerprint)
+            }),
+            SubTitle('Files'),
+            ObjectList({
+                'Private Key':      Link(fileName + _CA.extentions.privateKey),
+                'Public Key':       Link(fileName + _CA.extentions.publicKey),
+                'Certificate':      Link(fileName + _CA.extentions.certificate),
+                'Certificate Text': Link(fileName + _CA.extentions.certificateText),
+                'CA Chain':         Link(fileName + _CA.extentions.caBundle)
+            }),
+            SubTitle('Endpoints'),
+            ObjectList({
+                'DAPS': Link('https://daps.tb.nicos-rd.com/')
+            })
+        ]);
+    await fs.writeFile(filePath + _CA.extentions.readmeInfos, infoContent);
 };
 
 /**
