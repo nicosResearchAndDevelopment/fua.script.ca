@@ -15,6 +15,7 @@ const
     ts          = require('@nrd/fua.core.ts'),
     tty         = require('@nrd/fua.core.tty'),
     subprocess  = require('@nrd/fua.module.subprocess'),
+    markdown    = require('@nrd/fua.module.markdown'),
     processArgs = subprocess.parseArgv(process.argv);
 
 _CA.outputDir = path.join(__dirname, '../data');
@@ -490,37 +491,29 @@ CA.generateReadmeInfos = async function (file, options = {}) {
         fileName    = path.basename(file),
         metadata    = await CA.extractJsonMetadata(file),
         capitalize  = (val) => val.charAt(0).toUpperCase() + val.slice(1),
-        Bold        = (val) => val ? '**' + val + '**' : '',
-        Code        = (val) => val ? '`' + val + '`' : '',
-        Document    = (arr) => arr.filter(val => val).join('\n\n'),
-        Title       = (val) => val ? '# ' + val : '',
-        Link        = (href, label) => '[' + (label || href) + '](' + href + ')',
-        SubTitle    = (val) => val ? '## ' + val : '',
-        List        = (arr) => arr.filter(val => val).map(val => '- ' + val).join('\n'),
-        ObjectList  = (obj) => List(Object.entries(obj).filter(([key, val]) => val).map(([key, val]) => Bold(key + ':') + ' ' + val)),
-        infoContent = Document([
-            Title(capitalize(fileName) + ' Certificate'),
-            SubTitle('Metadata'),
-            ObjectList({
+        infoContent = markdown.document([
+            markdown.h1(capitalize(fileName) + ' Certificate'),
+            markdown.h2('Metadata'),
+            markdown.ul({
                 'Created':            new Date().toISOString(),
                 'Issuer':             metadata.Issuer,
                 'Subject':            metadata.Subject,
-                'SKI':                Code(metadata.SKI),
-                'AKI':                Code(metadata.AKI),
-                'SKI-AKI':            Code(metadata.SKIAKI),
-                'SHA256-Fingerprint': Code(metadata.certSha256Fingerprint)
+                'SKI':                markdown.code(metadata.SKI),
+                'AKI':                markdown.code(metadata.AKI),
+                'SKI-AKI':            markdown.code(metadata.SKIAKI),
+                'SHA256-Fingerprint': markdown.code(metadata.certSha256Fingerprint)
             }),
-            SubTitle('Files'),
-            ObjectList({
-                'Private Key':      Link(fileName + _CA.extentions.privateKey),
-                'Public Key':       Link(fileName + _CA.extentions.publicKey),
-                'Certificate':      Link(fileName + _CA.extentions.certificate),
-                'Certificate Text': Link(fileName + _CA.extentions.certificateText),
-                'CA Chain':         Link(fileName + _CA.extentions.caBundle)
+            markdown.h2('Files'),
+            markdown.ul({
+                'Private Key':      markdown.link(fileName + _CA.extentions.privateKey),
+                'Public Key':       markdown.link(fileName + _CA.extentions.publicKey),
+                'Certificate':      markdown.link(fileName + _CA.extentions.certificate),
+                'Certificate Text': markdown.link(fileName + _CA.extentions.certificateText),
+                'CA Chain':         markdown.link(fileName + _CA.extentions.caBundle)
             }),
-            SubTitle('Endpoints'),
-            ObjectList({
-                'DAPS': Link('https://daps.tb.nicos-rd.com/')
+            markdown.h2('Endpoints'),
+            markdown.ul({
+                'DAPS': markdown.link('https://daps.tb.nicos-rd.com/')
             })
         ]);
     await fs.writeFile(filePath + _CA.extentions.readmeInfos, infoContent);

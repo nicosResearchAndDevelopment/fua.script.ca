@@ -7,7 +7,7 @@ async.iife(async function generateFiwareCertificates() {
 
     tty.log.warning('generate testbed/cut/fiware');
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/dev/client', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/dev/client', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
@@ -17,7 +17,7 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/dev/server', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/dev/server', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
@@ -27,7 +27,7 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/car-kim/client', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/car-kim/client', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
@@ -37,7 +37,7 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/car-kim/server', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/car-kim/server', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
@@ -47,7 +47,7 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/platform-kim/client', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/platform-kim/client', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
@@ -57,7 +57,7 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
-    await CA.generateMinimalClientCertificate('testbed/cut/fiware/platform-kim/server', {
+    await CA.generateCustomerCertificate('testbed/cut/fiware/platform-kim/server', {
         ca:      'testbed/ca',
         subject: {
             country:             'DE',
