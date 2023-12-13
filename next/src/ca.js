@@ -31,17 +31,18 @@ _CA.git       = subprocess.ExecutionProcess('git', {
 });
 
 _CA.extentions = Object.freeze({
-    privateKey:        '.key',
-    publicKey:         '.pub',
-    certificate:       '.cert',
-    certificateText:   '.txt',
-    signingRequest:    '.csr',
-    certificateConfig: '.conf',
-    caBundle:          '.ca',
-    caSerial:          '.srl',
-    jsonMetadata:      '.json',
-    jsLoader:          '.js',
-    readmeInfos:       '.md'
+    privateKey:         '.key',
+    publicKey:          '.pub',
+    certificate:        '.cert',
+    certificateText:    '.txt',
+    certificateArchive: '.p12',
+    signingRequest:     '.csr',
+    certificateConfig:  '.conf',
+    caBundle:           '.ca',
+    caSerial:           '.srl',
+    jsonMetadata:       '.json',
+    jsLoader:           '.js',
+    readmeInfos:        '.md'
 });
 
 /**
@@ -374,6 +375,25 @@ CA.generateSignedCertificate = async function (file, options = {}) {
  * @param {Record} options
  * @returns {Promise<void>}
  */
+CA.generateCertificateArchive = async function (file, options = {}) {
+    assert.string(file);
+    assert.object(options, {passPhrase: is.string});
+    await _CA.openSSL('pkcs12', {
+        export:   true,
+        in:       file + _CA.extentions.certificate,
+        inkey:    file + _CA.extentions.privateKey,
+        certfile: file + _CA.extentions.caBundle,
+        out:      file + _CA.extentions.certificateArchive,
+        passout:  'pass:' + options.passPhrase
+    });
+    await _CA.git('add', file + _CA.extentions.certificateArchive);
+};
+
+/**
+ * @param {string} file
+ * @param {Record} options
+ * @returns {Promise<void>}
+ */
 CA.generateCertificateReadableText = async function (file, options = {}) {
     assert.string(file);
     assert.object(options);
@@ -399,7 +419,7 @@ CA.generateCertificateAuthorityBundle = async function (file, options = {}) {
     const
         caCertPath   = _CA.getOutputPath(options.ca + _CA.extentions.certificate),
         caBundlePath = _CA.getOutputPath(options.ca + _CA.extentions.caBundle),
-        bundlePath   = _CA.getOutputPath((file + _CA.extentions.caBundle)),
+        bundlePath   = _CA.getOutputPath(file + _CA.extentions.caBundle),
         caCert       = await fs.readFile(caCertPath, 'utf-8'),
         certBundle   = [caCert.trim()];
     try {
@@ -517,6 +537,7 @@ CA.generateReadmeInfos = async function (file, options = {}) {
             })
         ]);
     await fs.writeFile(filePath + _CA.extentions.readmeInfos, infoContent);
+    await _CA.git('add', filePath + _CA.extentions.readmeInfos);
 };
 
 /**
@@ -593,6 +614,7 @@ CA.generateCustomerCertificate = async function (file, options = {}) {
     await CA.generateSignedCertificate(file, options);
     await fs.rm(_CA.getOutputPath(file + _CA.extentions.signingRequest));
     await CA.generateCertificateAuthorityBundle(file, options);
+    // await CA.generateCertificateArchive(file, options);
     await CA.generateCertificateReadableText(file, options);
     await CA.generateReadmeInfos(file, options);
 };

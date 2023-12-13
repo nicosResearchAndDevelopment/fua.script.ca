@@ -27,6 +27,10 @@ async.iife(async function generateFiwareCertificates() {
         }
     });
 
+    await CA.generateCertificateArchive('testbed/cut/fiware/dev/server', {
+        passPhrase: 'fiware'
+    });
+
     await CA.generateCustomerCertificate('testbed/cut/fiware/car-kim/client', {
         ca:      'testbed/ca',
         subject: {

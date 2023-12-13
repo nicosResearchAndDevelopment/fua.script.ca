@@ -6,16 +6,17 @@ const
     fs           = require('fs/promises'),
     EventEmitter = require('events'),
     _ext         = Object.freeze({
-        privateKey:        '.key',
-        publicKey:         '.pub',
-        certificate:       '.cert',
-        certificateText:   '.txt',
-        signingRequest:    '.csr',
-        certificateConfig: '.conf',
-        caBundle:          '.ca',
-        jsonMetadata:      '.json',
-        jsLoader:          '.js',
-        readmeInfos:       '.md'
+        privateKey:         '.key',
+        publicKey:          '.pub',
+        certificate:        '.cert',
+        certificateText:    '.txt',
+        certificateArchive: '.p12',
+        signingRequest:     '.csr',
+        certificateConfig:  '.conf',
+        caBundle:           '.ca',
+        jsonMetadata:       '.json',
+        jsLoader:           '.js',
+        readmeInfos:        '.md'
     }),
     // SEE https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.4
     // SEE https://docs.oracle.com/cd/E24191_01/common/tutorials/authz_cert_attributes.html
@@ -241,6 +242,18 @@ module.exports = class CAAgent extends EventEmitter {
         });
     } // CAAgent#generateSignedCertificate
 
+    async generateCertificateArchive(file, options) {
+        util.assert(options?.passPhrase, 'expected passPhrase');
+        await this.#openssl('pkcs12', {
+            export:   true,
+            in:       file + _ext.certificate,
+            inkey:    file + _ext.privateKey,
+            certfile: file + _ext.caBundle,
+            out:      file + _ext.certificateArchive,
+            pass:     'pass:' + options.passPhrase
+        });
+    } // CAAgent#generateCertificateArchive
+
     async generateCertificateReadableText(file, options) {
         const filePath = util.resolvePath(file + _ext.certificateText, this.#cwd);
         await fs.writeFile(
@@ -405,6 +418,7 @@ module.exports = class CAAgent extends EventEmitter {
         await this.generateSignedCertificate(file, options);
         await fs.rm(util.resolvePath(file + _ext.signingRequest, this.#cwd));
         await this.generateCertificateAuthorityBundle(file, options);
+        // await this.generateCertificateArchive(file, options);
         await this.generateCertificateReadableText(file, options);
         await this.generateReadmeInfos(file, options);
     } // CAAgent#generateCustomerCertificate
