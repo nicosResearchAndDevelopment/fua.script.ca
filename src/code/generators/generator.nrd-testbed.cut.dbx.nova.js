@@ -12,6 +12,22 @@ generators['nrd-testbed/ec/ids/cut/DBX/NOVA']
     await generators['nrd-testbed/ec/ids/cut/DBX/NOVA/6'](param);
 };
 
+generators['nrd-testbed/ec/ids/cut/DBX/NOVA-metadata']
+    = async function ({agent, config, defaults}) {
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/1/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/1/tls-server/server');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/2/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/2/tls-server/server');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/3/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/3/tls-server/server');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/4/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/4/tls-server/server');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/5/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/5/tls-server/server');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/6/connector/client');
+    await agent.generateJsonMetadata('nrd-testbed/ec/ids/cut/DBX/NOVA/6/tls-server/server');
+};
+
 generators['nrd-testbed/ec/ids/cut/DBX/NOVA/1']
     = async function (param) {
     await generators['nrd-testbed/ec/ids/cut/DBX/NOVA/1/connector/client'](param);
