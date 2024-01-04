@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "nicos Research & Development - Certificate Authority",
   "dependencies": {
-    "@nrd/fua.core.util": "1.0.0",
+    "@nrd/fua.core.util": "^1.0.12",
     "@nrd/fua.module.subprocess": "1.0.0"
   },
   "scripts": {
@@ -25,6 +25,7 @@
     "generate:nrd-testbed/ec/ids/cut/DBX": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX",
     "generate:nrd-testbed/ec/ids/cut/DBX/SWC": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/SWC",
     "generate:nrd-testbed/ec/ids/cut/DBX/SIE": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/SIE",
+    "generate:nrd-testbed/ec/ids/cut/DBX/NOVA": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/NOVA",
     "generate:nrd-testbed/ec/ids/cut/DBX/DUM": "npm start -- --generate nrd-testbed/ec/ids/cut/DBX/DUM",
     "generate:nicos-rd": "npm start -- --generate nicos-rd",
     "generate:nicos-rd/ca": "npm start -- --generate nicos-rd/ca",
