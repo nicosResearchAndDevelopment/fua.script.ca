@@ -18,6 +18,7 @@
     "generate:nrd-testbed/ec/ids/component/alice+bob": "npm start -- --generate nrd-testbed/ec/ids/component/alice --generate nrd-testbed/ec/ids/component/bob",
     "generate:nrd-testbed/ec/ids/component/alice+bob/tls-server/server": "npm start -- --generate nrd-testbed/ec/ids/component/alice/tls-server/server --generate nrd-testbed/ec/ids/component/bob/tls-server/server",
     "generate:nrd-testbed/ec/ids/component/daps_nrd/tls-server/server": "npm start -- --generate nrd-testbed/ec/ids/component/daps_nrd/tls-server/server",
+    "generate:nrd-testbed/ec/ids/component/mdb-open": "npm start -- --generate nrd-testbed/ec/ids/component/mdb-open",
     "generate:nrd-testbed/ec/ids/cut/FIWARE": "npm start -- --generate nrd-testbed/ec/ids/cut/FIWARE",
     "generate:nrd-testbed/ec/ids/cut/WNW": "npm start -- --generate nrd-testbed/ec/ids/cut/WNW",
     "generate:nrd-testbed/ec/ids/cut/WNW/FIT": "npm start -- --generate nrd-testbed/ec/ids/cut/WNW/FIT",

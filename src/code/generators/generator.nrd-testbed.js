@@ -301,6 +301,7 @@ generators['nrd-testbed/ec/ids/component/alice']
     = async function (param) {
     await generators['nrd-testbed/ec/ids/component/alice/connector/client'](param);
     await generators['nrd-testbed/ec/ids/component/alice/tls-server/server'](param);
+    await generators['nrd-testbed/ec/ids/component/mdb-open/tls-server/server'](param);
 };
 
 generators['nrd-testbed/ec/ids/component/alice/connector/client']
@@ -349,6 +350,34 @@ generators['nrd-testbed/ec/ids/component/bob/tls-server/server']
         subject: {
             ...defaults.subject,
             CN: ['tb', 'ec', 'ids', 'bob.nicos-rd.com']
+        }
+    });
+};
+
+generators['nrd-testbed/ec/ids/component/mdb-open']
+    = async function (param) {
+    await generators['nrd-testbed/ec/ids/component/mdb-open/connector/client'](param);
+    await generators['nrd-testbed/ec/ids/component/mdb-open/tls-server/server'](param);
+};
+
+generators['nrd-testbed/ec/ids/component/mdb-open/connector/client']
+    = async function ({agent, config, defaults}) {
+    await agent.generateClientCertificate('nrd-testbed/ec/ids/component/mdb-open/connector/client', {
+        ca:      'nrd-testbed/ec/ids/component/ca',
+        subject: {
+            ...defaults.subject,
+            CN: ['tb', 'ec', 'ids', 'ec_ids_connector_mdb-open']
+        }
+    });
+};
+
+generators['nrd-testbed/ec/ids/component/mdb-open/tls-server/server']
+    = async function ({agent, config, defaults}) {
+    await agent.generateClientCertificate('nrd-testbed/ec/ids/component/mdb-open/tls-server/server', {
+        ca:      'nrd-testbed/ec/ids/component/ca',
+        subject: {
+            ...defaults.subject,
+            CN: 'mdb.tb.nicos-rd.com'
         }
     });
 };
