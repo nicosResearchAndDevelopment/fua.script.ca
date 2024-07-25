@@ -3,20 +3,22 @@ const
     tty   = require('@nrd/fua.core.tty'),
     CA    = require('../../src/ca.js');
 
-async.iife(async function generateRootCA() {
+async.iife(async function generateTestbedCA() {
 
-    tty.log.warning('generate root/ca');
+    tty.log.warning('generate databri-x/ca');
 
-    await CA.generateRootCertificate('root/ca', {
+    await CA.generateSubCertificate('databri-x/ca', {
+        ca:         'root/ca',
         subject:    {
             country:      'DE',
             province:     'NRW',
             locality:     'Muenster',
             organization: 'nicos AG',
-            commonName:   'Root'
+            commonName:   'DataBri-X'
         },
+        extensions: 'root_extension',
         expiration: {
-            years: 20
+            years: 10
         }
     });
 

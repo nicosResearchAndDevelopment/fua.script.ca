@@ -20,12 +20,20 @@ const
     processArgs = subprocess.parseArgv(process.argv);
 
 _CA.outputDir = path.join(__dirname, '../data');
-_CA.openSSL   = subprocess.ExecutionProcess('openssl', {
+
+_CA.openSSL = subprocess.ExecutionProcess('openssl', {
     cwd:      _CA.outputDir,
     verbose:  !!processArgs.verbose,
     encoding: 'utf-8'
 });
-_CA.git       = subprocess.ExecutionProcess('git', {
+
+_CA.keyTool = subprocess.ExecutionProcess('keytool', {
+    cwd:      _CA.outputDir,
+    verbose:  !!processArgs.verbose,
+    encoding: 'utf-8'
+});
+
+_CA.git = subprocess.ExecutionProcess('git', {
     cwd:      _CA.outputDir,
     verbose:  !!processArgs.verbose,
     encoding: 'utf-8'
@@ -37,6 +45,7 @@ _CA.extentions = Object.freeze({
     certificate:        '.cert',
     certificateText:    '.txt',
     certificateArchive: '.p12',
+    keyStore:           '.jks',
     signingRequest:     '.csr',
     certificateConfig:  '.conf',
     caBundle:           '.ca',
@@ -232,6 +241,26 @@ CA.generateCertificateArchive = async function (file, options = {}) {
         passout:  'pass:' + options.passPhrase
     });
     await _CA.git('add', file + _CA.extentions.certificateArchive);
+};
+
+/**
+ * @param {string} file
+ * @param {Record} options
+ * @returns {Promise<void>}
+ */
+CA.generateKeyStore = async function (file, options = {}) {
+    assert.string(file);
+    assert.object(options);
+    // keytool
+    //   -importkeystore
+    //   -srckeystore "$P12_FILE"
+    //   -srcstoretype pkcs12
+    //   -destkeystore "$JKS_FILE"
+    //   -deststoretype jks
+    //   -deststorepass "$PASSWORD"
+    //   -srcstorepass "$PASSWORD"
+    //   -noprompt 2>/dev/null
+    assert.todo(/* TODO */);
 };
 
 /**
