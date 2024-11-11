@@ -250,17 +250,18 @@ CA.generateCertificateArchive = async function (file, options = {}) {
  */
 CA.generateKeyStore = async function (file, options = {}) {
     assert.string(file);
-    assert.object(options);
-    // keytool
-    //   -importkeystore
-    //   -srckeystore "$P12_FILE"
-    //   -srcstoretype pkcs12
-    //   -destkeystore "$JKS_FILE"
-    //   -deststoretype jks
-    //   -deststorepass "$PASSWORD"
-    //   -srcstorepass "$PASSWORD"
-    //   -noprompt 2>/dev/null
-    assert.todo(/* TODO */);
+    assert.object(options, {passPhrase: is.string});
+    await _CA.keyTool({
+        '-importkeystore': true,
+        '-noprompt':       true,
+        '-srcstoretype':   'pkcs12',
+        '-srckeystore':    file + _CA.extentions.certificateArchive,
+        '-srcstorepass':   options.passPhrase,
+        '-deststoretype':  'jks',
+        '-destkeystore':   file + _CA.extentions.keyStore,
+        '-deststorepass':  options.passPhrase
+    });
+    await _CA.git('add', file + _CA.extentions.keyStore);
 };
 
 /**

@@ -21,6 +21,8 @@ async.iife(async function generateFiwareCertificates() {
         passPhrase: 'XtiwtP41cgE38SEkfaTOqg5ZEO5zvxSZMySRwIzjxVs='
     });
 
-    // await CA.generateKeyStore('databri-x/nicos-rd/sovity-edc/client');
+    await CA.generateKeyStore('databri-x/nicos-rd/sovity-edc/client', {
+        passPhrase: 'XtiwtP41cgE38SEkfaTOqg5ZEO5zvxSZMySRwIzjxVs='
+    });
 
 });
