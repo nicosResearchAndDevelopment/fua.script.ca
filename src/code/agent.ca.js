@@ -1,6 +1,6 @@
 const
     util         = require('./util.ca.js'),
-    subprocess   = require('@nrd/fua.module.subprocess'),
+    subprocess   = require('@fua/module.subprocess'),
     path         = require('path'),
     crypto       = require('crypto'),
     fs           = require('fs/promises'),

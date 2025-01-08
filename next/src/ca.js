@@ -1,7 +1,7 @@
 const
     CA         = exports,
-    identifier = '@nrd/fua.script.ca',
-    assert     = require('@nrd/fua.core.assert');
+    identifier = '@fua/script.ca',
+    assert     = require('@fua/core.assert');
 
 assert(!global[identifier], 'unable to load a second uncached version of the singleton ' + identifier);
 Object.defineProperty(global, identifier, {value: CA, configurable: false, writable: false, enumerable: false});
@@ -12,11 +12,11 @@ const
     path        = require('path'),
     crypto      = require('crypto'),
     fs          = require('fs/promises'),
-    is          = require('@nrd/fua.core.is'),
-    ts          = require('@nrd/fua.core.ts'),
-    tty         = require('@nrd/fua.core.tty'),
-    subprocess  = require('@nrd/fua.module.subprocess'),
-    markdown    = require('@nrd/fua.module.markdown'),
+    is          = require('@fua/core.is'),
+    ts          = require('@fua/core.ts'),
+    tty         = require('@fua/core.tty'),
+    subprocess  = require('@fua/module.subprocess'),
+    markdown    = require('@fua/module.markdown'),
     processArgs = subprocess.parseArgv(process.argv);
 
 _CA.outputDir = path.join(__dirname, '../data');

@@ -1,6 +1,6 @@
 const
-    async = require('@nrd/fua.core.async'),
-    tty   = require('@nrd/fua.core.tty'),
+    async = require('@fua/core.async'),
+    tty   = require('@fua/core.tty'),
     CA    = require('../../../src/ca.js');
 
 async.iife(async function generateFiwareCertificates() {

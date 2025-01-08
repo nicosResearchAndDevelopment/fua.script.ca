@@ -1,9 +1,9 @@
 const
-    _util      = require('@nrd/fua.core.util'),
+    _util      = require('@fua/core.util'),
     path       = require('path'),
     fs         = require('fs/promises'),
     crypto     = require('crypto'),
-    subprocess = require('@nrd/fua.module.subprocess'),
+    subprocess = require('@fua/module.subprocess'),
     util       = exports = module.exports = {
         ..._util,
         assert: _util.Assert('nrd-ca')

@@ -1,4 +1,4 @@
-# nrd-ca
+# @fua/script.ca
 
 - [documentation](./documentation)
 

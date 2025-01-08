@@ -1,13 +1,13 @@
 {
-  "name": "@nrd/fua.script.ca",
-  "version": "1.0.0",
+  "name": "@fua/script.ca",
+  "version": "0.0.0-dev",
   "description": "nicos Research & Development - Certificate Authority",
   "dependencies": {
-    "@nrd/fua.core.util": "^1.0.12",
-    "@nrd/fua.module.subprocess": "1.0.0"
+    "@fua/core.util": "^1.0.12",
+    "@fua/module.subprocess": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node ./src/launch.ca.js",
     "generate:root/ca": "npm start -- --generate root/ca",
     "generate:develop-spe": "npm start -- --generate develop-spe",
@@ -34,14 +34,19 @@
     "generate:nicos-rd/www": "npm start -- --generate nicos-rd/www",
     "generate:nicos-rd/tb/daps": "npm start -- --generate nicos-rd/tb/daps"
   },
+  "mocha": {
+    "bail": false,
+    "recursive": false,
+    "spec": "test/*.test.js"
+  },
   "repository": {
     "type": "git",
-    "url": "ssh://git@git02.int.nsc.ag:10022/research/fua/script/ca.git"
+    "url": "ssh://git@github.com:nicosResearchAndDevelopment/fua.script.ca.git"
   },
   "keywords": [
     "ca",
     "certs"
   ],
-  "author": "spetrac@nicos-ag.com",
-  "license": "UNLICENSED"
+  "author": "Simon Petrac <pfoerdie@gmail.com>",
+  "license": "MIT"
 }

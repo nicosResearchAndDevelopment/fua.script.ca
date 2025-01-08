@@ -1,8 +1,8 @@
 const
     DN      = exports,
-    assert  = require('@nrd/fua.core.assert'),
-    objects = require('@nrd/fua.core.objects'),
-    is      = require('@nrd/fua.core.is');
+    assert  = require('@fua/core.assert'),
+    objects = require('@fua/core.objects'),
+    is      = require('@fua/core.is');
 
 /**
  * @see https://www.rfc-editor.org/rfc/rfc5280#section-4.1.2.4
